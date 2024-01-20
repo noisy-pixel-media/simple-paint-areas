@@ -1,0 +1,284 @@
+/* Dark Mode Styles */
+:root {
+  --bg-color-light: #f5f5f5;
+  --text-color-dark: #333;
+  --bg-color-dark: #121212; /* Darker background for dark mode */
+  --text-color-light: #e0e0e0; /* Lighter text for better contrast */
+  --accent-color: #2980b9;
+  --accent-color-dark: #226a92; /* Slightly darker accent for interactive elements */
+}
+
+@media (max-width: 768px) {
+  #themeToggle {
+    position: static;
+    margin-bottom: 10px;
+  }
+
+  .modal-dialog {
+    width: 100%;
+    margin: 0;
+  }
+
+  .modal-content {
+    border-radius: 0;
+  }
+}
+
+
+
+/* Global styles for form elements */
+input[type="text"],
+input[type="number"],
+select.form-control,
+button,
+textarea {
+  min-height: 44px; /* Accessible tap target size */
+}
+
+.table-responsive {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .table-responsive {
+    border: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+#themeToggle {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  padding: 3px 10px;
+  font-size: 0.8rem;
+  box-shadow: none;
+}
+#themeIcon {
+  filter: invert(36%) sepia(67%) saturate(5258%) hue-rotate(201deg) brightness(105%) contrast(101%);
+}
+
+body.dark-mode {
+  background-color: var(--bg-color-dark);
+  color: var(--text-color-light); /* Use the lighter text color for dark mode */
+}
+
+body.dark-mode .table {
+  color: #dee2e6;
+}
+
+.card.dark-mode {
+  background: var(--bg-color-dark);
+  color: var(--text-color-light);
+  border-color: var(--bg-color-dark);
+}
+
+/* Update interactive elements like buttons and inputs to have better contrast */
+button.dark-mode, input.dark-mode {
+  background: var(--accent-color-dark);
+  color: var(--text-color-light); /* Ensure text is visible */
+  border-color: var(--accent-color-dark);
+}
+
+button.dark-mode:hover {
+  background: lighten(var(--accent-color-dark), 10%);
+}
+
+/* Ensure inputs and buttons have light text in dark mode */
+input.dark-mode, button.dark-mode {
+  color: var(--text-color-light);
+}
+
+/* Button Styles */
+button {
+  background: var(--accent-color);
+  border: none;
+  color: white;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background: darken(var(--accent-color), 10%);
+}
+
+button:active {
+  background: darken(var(--accent-color), 15%);
+}
+
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(var(--accent-color), 0.5);
+}
+
+/* Dark mode styles for modals */
+body.dark-mode .modal-content {
+  background-color: var(--bg-color-dark);
+  color: var(--text-color-light);
+}
+
+body.dark-mode .modal-header,
+body.dark-mode .modal-footer {
+  border-color: var(--accent-color-dark);  
+}
+
+body.dark-mode .close {
+  color: var(--text-color-light);
+  text-shadow: 0 1px 0 var(--bg-color-dark);
+}
+
+body.dark-mode .modal-title {
+  color: var(--text-color-light);  
+}
+
+body.dark-mode .modal .form-control {
+  background-color: var(--bg-color-dark);
+  color: var(--text-color-light);
+  border-color: var(--accent-color-dark);
+}
+
+
+textarea {
+  resize: vertical; /* Allows the user to resize the textarea vertically */
+  
+}
+
+
+/* For Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none; /* Standard syntax */
+  margin: 0;
+}
+
+/* For Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+  appearance: textfield; /* Standard syntax */
+}
+
+
+.summary-area {
+  padding: 20px;
+  background-color: var(--bg-color-light);
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.summary-area h3 {
+  margin-bottom: 10px;
+}
+
+.summary-area p {
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+/* Additional dark mode styles */
+body.dark-mode .summary-area {
+  background-color: var(--bg-color-dark);
+  border-color: var(--accent-color-dark);  
+}
+
+body.dark-mode .summary-area h3 {
+  color: var(--text-color-light);
+}
+
+body.dark-mode .summary-area p {
+  color: #dee2e6;  
+}
+
+body.dark-mode textarea,
+body.dark-mode input {
+  background-color: var(--bg-color-dark);
+  color: var(--text-color-light);
+  border-color: var(--accent-color-dark);  
+}
+
+body.dark-mode .modal-footer {
+  border-color: var(--accent-color-dark);  
+}
+
+body.dark-mode .form-text {
+  color: #dee2e6;
+}
+
+body.dark-mode .toast {
+  background-color: #343a40;
+  color: #f8f9fa;
+}
+
+body.dark-mode .toast-header {
+  background-color: #23272b;
+  border-bottom: 1px solid var(--accent-color-dark);
+  color: #f8f9fa;
+}
+
+body.dark-mode .toast-body {
+  background-color: #343a40;
+  color: #f8f9fa;
+}
+
+
+.modal-content {
+  border-radius: 0.3rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.modal-footer {
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 0;
+}
+
+.modal-footer .btn {
+  flex-grow: 1;
+  flex-basis: 50%;
+  margin: 0;
+  padding: 1rem 0;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-radius: 0;
+}
+
+.modal-footer .btn-link {
+  border-right: 1px solid;
+}
+
+.modal-footer .btn-link:last-child {
+  border-right: none;
+}
+
+button.clear-form {
+  background-color: transparent; 
+  position:absolute;
+  right: 50px;
+  padding: 1px 1px;
+  text-align: right;
+  min-height: 20px;
+  min-width: 20px;
+  color: #007bff;
+
+}
+
+.measurement {
+  margin-bottom: 0;
+}
