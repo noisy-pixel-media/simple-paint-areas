@@ -6,42 +6,57 @@ document.addEventListener('DOMContentLoaded', function() {
   const areasTable = document.getElementById('areasTable').querySelector('tbody');
   const areaForm = document.getElementById('areaForm');
   const customerForm = document.getElementById('customerForm');
-  let editAreaIndex = -1; // Create index of the area being edited
-  let editCustomerIndex = -1; // Index of the customer being edited
-  let userSettings = JSON.parse(localStorage.getItem('userSettings')) || {};
-
-  // Customer Selection Logic
   const customerSelect = document.getElementById('customerSelect');
+  
+  let editAreaIndex = -1; // Set index for new record
+  let editCustomerIndex = -1; // Set index for new record
+  
+  // Check for Existing Data
+  let userSettings = JSON.parse(localStorage.getItem('userSettings')) || {};
+    localStorage.setItem('userSettings', JSON.stringify(userSettings));
+  
   let customers = JSON.parse(localStorage.getItem('customers')) || [
-      {
-        name: '<< PLEASE CREATE CUSTOMER >>',
-        address: '',
-        areas: []
-      }
-    ];
-  
-  
-  // incase it needs to be converted.
-  // let selCustIndex = parseInt(userSettings.lastCustSelected.value, 10) || 0; 
-  let selCustIndex = userSettings.lastCustSelected.value || 0;
-  
-  
+    {
+      name: '<< SELECT OR CREATE CUSTOMER >>',
+      address: '',
+      areas: []
+    }
+  ];
+    localStorage.setItem('customers', JSON.stringify(customers));
+  let selCustIndex = 0;
+  if (userSettings.lastCustSelected) {
+    selCustIndex = parseInt(userSettings.lastCustSelected, 10);
+    // console.log('try to set from local storage', selCustIndex);
+  } else {
+    selCustIndex = 0;
+    // console.log('set from default', selCustIndex);
+  }
+  // Set Customer Information on Load
+  setCustomerInfoCard();
+
+  // Initial area selection to prepare for rendering
   let selectedCustomerAreas = customers[selCustIndex].areas;
   
-  
+  // Listen and process customer selection
   customerSelect.addEventListener('change', function() {
     selCustIndex = parseInt(this.value, 10);
     selectedCustomerAreas = customers[selCustIndex].areas;
+    setCustomerInfoCard();
     renderAreas(selCustIndex);
     updateSummaryTotals(selectedCustomerAreas);
-    userSettings = {
-      lastCustSelected: selCustIndex
-      };
-    localStorage.setItem('userSettings', JSON.stringify(userSettings));
+
+      // Save customer selection to local storage for page reload
+      userSettings = { lastCustSelected: selCustIndex };
+      localStorage.setItem('userSettings', JSON.stringify(userSettings));
   });
 
+  function setCustomerInfoCard() {
+    const customer = customers[selCustIndex];
+    document.getElementById('cardCustName').innerText = customer.name;
+    document.getElementById('cardCustAddress').innerText = customer.address;
+  }
 
-  // Select first field in modal on open
+  // Select first field in modal on open for keyboard friendliness
   $('#areaModal').on('shown.bs.modal', function() {
     document.getElementById('areaName').focus();
   });
@@ -51,17 +66,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Clear Forms When Clicking Add and Not Edit
   const addAreaBtn = document.getElementById('createArea');
-    addAreaBtn.addEventListener('click', () => {
-      clearAreaForm();    
-    });
+    addAreaBtn.addEventListener('click', () => { clearAreaForm(); });
   const addCustomerBtn = document.getElementById('createCustomer');
-    addCustomerBtn.addEventListener('click', () => {
-      clearCustomerForm();
-    });
+    addCustomerBtn.addEventListener('click', () => { clearCustomerForm(); });
 
 
-
-  
   // Save Customer Form
   customerForm.addEventListener('submit', function(e) {
     e.preventDefault();
@@ -73,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function() {
       address: customerAddress,
       areas: []
     };
-
     if (editCustomerIndex === -1) {
       customers.push(newCustomer);
     } else {
@@ -83,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
     localStorage.setItem('customers', JSON.stringify(customers));
     $('#customerModal').modal('hide');
     populateCustomerDropdown();
-    clearCustomerForm();
+    // clearCustomerForm();
     updateSummaryTotals(selectedCustomerAreas);
     showToast('New customer added successfully!');
   });
@@ -121,8 +129,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   // Set global variables for area calculations - Define at document level to persist
-  let aName = ''
-  let aNameDesc = ''
+  let aName = '';
+  let aNameDesc = '';
   let aLength = 0;
   let aWidth = 0;
   let aHeight = 0;
@@ -157,29 +165,89 @@ document.addEventListener('DOMContentLoaded', function() {
 
   let calcWallSqFt = 0;
   let calcCeilingSqFt = 0;
+  let calcAccentWallSqFt = 0;
   let calcAreaPerimeter = 0;
+  let calcBaseboardsLnFt = 0;
+  let calcCrownLnFt = 0;
+  let calcChairRailLnFt = 0;
+  let calcCabinetFacialSqFt = 0;
+
 
   // Function to calculate and display area calculations
   function calculateAndDisplay() {
       aLength = parseFloat(document.getElementById('areaLength').value) || 0;
       aWidth = parseFloat(document.getElementById('areaWidth').value) || 0;
       aHeight = parseFloat(document.getElementById('areaHeight').value) || 0;
-    
-      calcWallSqFt = (aLength + aWidth) * 2 * aHeight;
-      calcCeilingSqFt = aLength * aWidth;
+      // aDoorsInt = parseFloat(document.getElementById('areaDoorsInt').value) || 0;
+      // aDoorsExt = parseFloat(document.getElementById('areaDoorsExt').value) || 0;
+      // aJambs = parseFloat(document.getElementById('areaJambs').value) || 0;
+      // aWindows = parseFloat(document.getElementById('areaWindows').value) || 0;
+      // aPonyWallsLnFt = parseFloat(document.getElementById('ponyWallsLnFt').value) || 0;
+      // aWindowSeatsLnFt = parseFloat(document.getElementById('windowSeatsLnFt').value) || 0;
+      // aShelvingLnFt = parseFloat(document.getElementById('shelvingLnFt').value) || 0;
+      aWallPercent = parseFloat(document.getElementById('wallPercent').value) || 0;
+      aHasBaseboards = document.getElementById('hasBaseboards').checked;
+      aBasePercent = parseFloat(document.getElementById('basePercent').value) || 0;
+      aHasCrown = document.getElementById('hasCrown').checked;
+      aCrownPercent = parseFloat(document.getElementById('crownPercent').value) || 0;
+      aHasChairRail = document.getElementById('hasChairRail').checked;
+      aCRailPercent = parseFloat(document.getElementById('cRailPercent').value) || 0;
+      // aTwoStory = document.getElementById('twoStory').checked;
+      aBaseCabLength = parseFloat(document.getElementById('baseCabLength').value) || 0;
+      aBaseCabHeight = parseFloat(document.getElementById('baseCabHeight').value) || 0;
+      aUpperCabLength = parseFloat(document.getElementById('upperCabLength').value) || 0;
+      aUpperCabHeight = parseFloat(document.getElementById('upperCabHeight').value) || 0;
+      aFullCabLength = parseFloat(document.getElementById('fullCabLength').value) || 0;
+      aFullCabHeight = parseFloat(document.getElementById('fullCabHeight').value) || 0;
+      // aPaintWalls = document.getElementById('paintWalls').checked;
+      // aPaintCeiling = document.getElementById('paintCeiling').checked;
+      // aPaintTrim = document.getElementById('paintTrim').checked;
+      // aPaintDoors = document.getElementById('paintDoors').checked;
+      // aAccentWall = document.getElementById('accentWall').checked;
+      aNumAccentWalls = parseFloat(document.getElementById('numAccentWalls').value) || 0; 
+      
       calcAreaPerimeter = (aLength + aWidth) * 2;
+      calcWallSqFt = calcAreaPerimeter * aHeight;
+      calcAccentWallSqFt = Math.ceil(calcAreaPerimeter * aHeight * (aNumAccentWalls / 4));
+      calcCeilingSqFt = aLength * aWidth;
+      calcBaseboardsLnFt = Math.ceil(calcAreaPerimeter * (aBasePercent / 100));
+      calcCrownLnFt = Math.ceil(calcAreaPerimeter * (aCrownPercent / 100));
+      calcChairRailLnFt = Math.ceil(calcAreaPerimeter * (aCRailPercent / 100 * 1.5));
+      calcCabinetFacialSqFt = Math.ceil(
+          (aBaseCabHeight * aBaseCabLength) + 
+          (aUpperCabHeight * aUpperCabLength) + 
+          (aFullCabHeight * aFullCabLength));
+      
 
-      document.getElementById('wallSqFt').textContent = calcWallSqFt;
-      document.getElementById('ceilingSqFt').textContent = calcCeilingSqFt;
-      document.getElementById('areaPerimeter').textContent = calcAreaPerimeter;
+      document.getElementById('wallSqFt').textContent = calcWallSqFt; 
+      document.getElementById('accentWallSqFt').textContent = calcAccentWallSqFt; 
+      document.getElementById('ceilingSqFt').textContent = calcCeilingSqFt; 
+      document.getElementById('areaPerimeter').textContent = calcAreaPerimeter; 
+      document.getElementById('baseLnFt').textContent = calcBaseboardsLnFt;
+      document.getElementById('crownLnFt').textContent = calcCrownLnFt;
+      document.getElementById('chairRailLnFt').textContent = calcChairRailLnFt;
+      document.getElementById('cabSqFt').textContent = calcCabinetFacialSqFt;
+
   }
 
   // Event listener for input changes
   document.getElementById('areaLength').addEventListener('input', calculateAndDisplay);
   document.getElementById('areaWidth').addEventListener('input', calculateAndDisplay);
   document.getElementById('areaHeight').addEventListener('input', calculateAndDisplay);
-
-
+  document.getElementById('wallPercent').addEventListener('input', calculateAndDisplay);
+  document.getElementById('basePercent').addEventListener('input', calculateAndDisplay);
+  document.getElementById('crownPercent').addEventListener('input', calculateAndDisplay);
+  document.getElementById('cRailPercent').addEventListener('input', calculateAndDisplay);
+  document.getElementById('baseCabLength').addEventListener('input', calculateAndDisplay);
+  document.getElementById('baseCabHeight').addEventListener('input', calculateAndDisplay);
+  document.getElementById('upperCabLength').addEventListener('input', calculateAndDisplay);
+  document.getElementById('upperCabHeight').addEventListener('input', calculateAndDisplay);
+  document.getElementById('fullCabLength').addEventListener('input', calculateAndDisplay);
+  document.getElementById('fullCabHeight').addEventListener('input', calculateAndDisplay);
+  document.getElementById('numAccentWalls').addEventListener('input', calculateAndDisplay);
+  // document.getElementById('hasBaseboards').addEventListener('input', calculateAndDisplay);
+  // document.getElementById('hasCrown').addEventListener('input', calculateAndDisplay);
+  // document.getElementById('hasChairRail').addEventListener('input', calculateAndDisplay);
 
 
   // Function to calculate and update summary totals
@@ -226,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('totalIntDoorsCount').textContent = totalDoorsCountSelected;
     document.getElementById('totalExtDoorsCount').textContent = totalDoorsCountSelected;
     
-
+    
 
 
 
@@ -236,37 +304,38 @@ document.addEventListener('DOMContentLoaded', function() {
   // Function to add a new area or update an existing one
   areaForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      aLength = parseFloat(document.getElementById('areaLength').value);
-      aWidth = parseFloat(document.getElementById('areaWidth').value);
-      aHeight = parseFloat(document.getElementById('areaHeight').value);
-      aDoorsInt = parseFloat(document.getElementById('areaDoorsInt').value);
-      aDoorsExt = parseFloat(document.getElementById('areaDoorsExt').value);
-      aJambs = parseFloat(document.getElementById('areaJambs').value);
-      aWindows = parseFloat(document.getElementById('areaWindows').value);
-      aPonyWallsLnFt = parseFloat(document.getElementById('ponyWallsLnFt').value);
-      aWindowSeatsLnFt = parseFloat(document.getElementById('windowSeatsLnFt').value);
-      aShelvingLnFt = parseFloat(document.getElementById('shelvingLnFt').value);
-      aWallPercent = parseFloat(document.getElementById('wallPercent').value);
-      hasBaseboards = document.getElementById('hasBaseboards').checked;
-      hasCrown = document.getElementById('hasCrown').checked;
-      hasChairRail = document.getElementById('hasChairRail').checked;
-      aBasePercent = parseFloat(document.getElementById('basePercent').value);
-      aCrownPercent = parseFloat(document.getElementById('crownPercent').value);
-      aChairRailPercent = parseFloat(document.getElementById('chairRailPercent').value);
+      aName = document.getElementById('areaName').value;
       aNameDesc = document.getElementById('areaNameDesc').value;
+      aLength = parseFloat(document.getElementById('areaLength').value) || 0;
+      aWidth = parseFloat(document.getElementById('areaWidth').value) || 0;
+      aHeight = parseFloat(document.getElementById('areaHeight').value) || 0;
+      aDoorsInt = parseFloat(document.getElementById('areaDoorsInt').value) || 0;
+      aDoorsExt = parseFloat(document.getElementById('areaDoorsExt').value) || 0;
+      aJambs = parseFloat(document.getElementById('areaJambs').value) || 0;
+      aWindows = parseFloat(document.getElementById('areaWindows').value) || 0;
+      aPonyWallsLnFt = parseFloat(document.getElementById('ponyWallsLnFt').value) || 0;
+      aWindowSeatsLnFt = parseFloat(document.getElementById('windowSeatsLnFt').value) || 0;
+      aShelvingLnFt = parseFloat(document.getElementById('shelvingLnFt').value) || 0;
+      aWallPercent = parseFloat(document.getElementById('wallPercent').value) || 0;
+      aHasBaseboards = document.getElementById('hasBaseboards').checked;
+      aBasePercent = parseFloat(document.getElementById('basePercent').value) || 0;
+      aHasCrown = document.getElementById('hasCrown').checked;
+      aCrownPercent = parseFloat(document.getElementById('crownPercent').value) || 0;
+      aHasChairRail = document.getElementById('hasChairRail').checked;
+      aCRailPercent = parseFloat(document.getElementById('cRailPercent').value) || 0;
       aTwoStory = document.getElementById('twoStory').checked;
-      aBaseCabLength = parseFloat(document.getElementById('baseCabLength').value);
-      aBaseCabHeight = parseFloat(document.getElementById('baseCabHeight').value);
-      aUpperCabLength = parseFloat(document.getElementById('upperCabLength').value);
-      aUpperCabHeight = parseFloat(document.getElementById('upperCabHeight').value);
-      aFullCabLength = parseFloat(document.getElementById('fullCabLength').value);
-      aFullCabHeight = parseFloat(document.getElementById('fullCabHeight').value);
+      aBaseCabLength = parseFloat(document.getElementById('baseCabLength').value) || 0;
+      aBaseCabHeight = parseFloat(document.getElementById('baseCabHeight').value) || 0;
+      aUpperCabLength = parseFloat(document.getElementById('upperCabLength').value) || 0;
+      aUpperCabHeight = parseFloat(document.getElementById('upperCabHeight').value) || 0;
+      aFullCabLength = parseFloat(document.getElementById('fullCabLength').value) || 0;
+      aFullCabHeight = parseFloat(document.getElementById('fullCabHeight').value) || 0;
       aPaintWalls = document.getElementById('paintWalls').checked;
       aPaintCeiling = document.getElementById('paintCeiling').checked;
       aPaintTrim = document.getElementById('paintTrim').checked;
       aPaintDoors = document.getElementById('paintDoors').checked;
-      aNumAccentWalls = parseFloat(document.getElementById('numAccentWalls').value);
       aAccentWall = document.getElementById('accentWall').checked;
+      aNumAccentWalls = parseFloat(document.getElementById('numAccentWalls').value) || 0;
 
 
       calculateAndDisplay();
@@ -417,26 +486,48 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('areaLength').value = '';
     document.getElementById('areaWidth').value = '';
     document.getElementById('areaHeight').value = '';
-    document.getElementById('areaDoors').value = '';
+    document.getElementById('areaDoorsInt').value = '';
+    document.getElementById('areaDoorsExt').value = '';
     document.getElementById('areaJambs').value = '';
     document.getElementById('areaWindows').value = '';
+    document.getElementById('ponyWallsLnFt').value = '';
+    document.getElementById('windowSeatsLnFt').value = '';
+    document.getElementById('shelvingLnFt').value = '';
 
-    // Reset calculated values to default display (e.g., empty or zero)
-    document.getElementById('wallSqFt').textContent = '0';
-    document.getElementById('ceilingSqFt').textContent = '0';
-    document.getElementById('areaPerimeter').textContent = '0';
 
-    // Uncheck checkboxes
+    document.getElementById('wallPercent').value = '';
+    document.getElementById('hasBaseboards').checked = false;
+    document.getElementById('basePercent').value = '';
+    document.getElementById('hasCrown').checked = false;
+    document.getElementById('crownPercent').value = '';
+    document.getElementById('hasChairRail').checked = false;
+    document.getElementById('cRailPercent').value = '';
+    document.getElementById('twoStory').checked = false;
+
+    document.getElementById('baseCabLength').value = '';
+    document.getElementById('baseCabHeight').value = '';
+    document.getElementById('upperCabLength').value = '';
+    document.getElementById('upperCabHeight').value = '';
+    document.getElementById('fullCabLength').value = '';
+    document.getElementById('fullCabHeight').value = '';
     document.getElementById('paintWalls').checked = false;
     document.getElementById('paintCeiling').checked = false;
     document.getElementById('paintTrim').checked = false;
     document.getElementById('paintDoors').checked = false;
+    document.getElementById('numAccentWalls').value = '';
+    document.getElementById('accentWall').value = '';
 
-    // Uncheck features
-    document.getElementById('hasBaseboards').checked = false;
-    document.getElementById('hasCrown').checked = false;
-    document.getElementById('hasChairRail').checked = false;
 
+    // Reset calculated values to default display (e.g., empty or zero)
+    document.getElementById('wallSqFt').textContent = '';
+    document.getElementById('accentWallSqFt').textContent = '';
+    document.getElementById('ceilingSqFt').textContent = '';
+    document.getElementById('areaPerimeter').textContent = '';
+    document.getElementById('baseLnFt').textContent = '';
+    document.getElementById('crownLnFt').textContent = '';
+    document.getElementById('chairRailLnFt').textContent = '';
+    document.getElementById('cabSqFt').textContent = '';
+    
     // Clear the createdDate text
     document.getElementById('createdDate').textContent = '';
 
