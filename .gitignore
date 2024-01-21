@@ -1,1 +1,7 @@
+# Ignore Archived Files
 _archive/
+
+# Ignore Tools
+_tools/
+
+# Ignore Specific Files

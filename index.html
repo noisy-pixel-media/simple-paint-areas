@@ -4,49 +4,85 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Area Management App</title>
+    <link rel="shortcut icon" href="https://www.google.com/s2/favicons?domain=myhdpainter.com" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="./src/bootstrap.css"> -->
     <link rel="stylesheet" href="./src/style.css">
 </head>
 <body>
-    
+  
     <!-- Dark Mode Toggle -->
-    <button id="themeToggle" class="btn mb-1">
+    <button id="themeToggle" class="btn mb-1 ">
       <img width="30" height="30" src="img/dark-mode-icon-sq-moon.svg" id="themeIcon" alt="day-and-night"/>
     </button>
-    
-
 
     <!-- Customer Selection Dropdown -->
-    <div class="container-xl mt-5">
-      <div class="d-flex justify-content-between align-items-center">
-        <label for="customerSelect"></label>
-        <select id="customerSelect" class="form-control form-select mb-4"></select>
+    <div class="container-xl mt-5 mb-1 row mx-auto">
+      <div class="col-md-6 mt-1 mb-1 align-items-center d-flex">
+        <button type="button" class="btn btn-primary ms-1 me-1 flex-fill" data-bs-toggle="modal" data-bs-target="#customerModal" id="createCustomer">Create Customer</button>  
+        <button type="button" class="btn btn-primary ms-1 me-1 flex-fill" data-bs-toggle="modal" data-bs-target="#customerModal" id="editCustomer">Edit Customer</button>  
       </div>
-      <div class="d-flex justify-content-between align-items-center">
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customerModal" id="createCustomer">Create Customer</button>  
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#customerModal" id="editCustomer">Edit Customer</button>  
-    </div>
+      <div class="col-md-6 mt-1 mb-1 align-items-center">
+        <select id="customerSelect" class="form-control form-select "></select>
+      </div>
+    </div>  
 
     <!-- Areas Summary -->
-    <div class="container-xl mt-4 summary-area">
-      <div class="row">
-        
-        <div class="col-md-6 col-sm-12">
-          <h4>Summary</h4>
-          <p>Wall SF: <span id="totalWallSqFtSelected">0</span> sf</p>
-          <p>Ceiling SF: <span id="totalCeilingSqFtSelected">0</span> sf</p>
-          <p>Door (sides): <span id="totalDoorsCountSelected">0</span></p>
-          <p>Jamb (sides): <span id="totalJambsCountSelected">0</span></p>
-        </div>
-        <div class="col-md-6 col-sm-12">
-          <h4>Summary</h4>
-          <p>Base LF: <span id="totalBaseLengthSelected">0</span> sq ft</p>
-          <p>Crown LF: <span id="totalCrownLengthSelected">0</span> sq ft</p>
-          <p>Chair Rail LF: <span id="totalChairRailLengthSelected">0</span> sq ft</p>
-          <p>Total Sills: <span id="totalWindowsCountSelected">0</span></p>
-        </div>
+    <div id="card-holder" class=" mx-auto p-2 m-1 summary-area">
+      <div class="card text-white bg-dark m-1 mx-auto" id="summary-card">
+        <div class="card-header">Customer Paint Scope Summary</div>
+        <div class="card-body row">
+          <div class="col-sm mb-2">
+            <h5 class="card-title">Total Footage</h5>
+            <!-- <h6 class="card-subtitle text-muted mb-2">Subtitle Information</h6> -->
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                Total Wall SqFt:
+                <span id="totalWallSqFt" class="badge bg-primary">1</span>
+              </li>
+              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                Total Ceiling SqFt:
+                <span id="totalCeilingSqFt" class="badge bg-primary">1</span>
+              </li>
+              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                Total Baseboard LnFt:
+                <span id="totalBaseboardLnFt" class="badge bg-primary">1</span>
+              </li>
+              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                Total Crown LnFt:
+                <span id="totalCrownLnFt" class="badge bg-primary">1</span>
+              </li>
+              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                Total Chair Rail LnFt:
+                <span id="totalChairRailLnFt" class="badge bg-primary">1</span>
+              </li>
+            </ul>
+          </div>
+          <div class="col-sm mb-2">
+            <h5 class="card-title">Feature Item Counts</h5>
+            <!-- <h6 class="card-subtitle text-muted mb-2">Subtitle Information</h6> -->
+            <ul class="list-group">
+              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                Total Door Jambs:
+                <span id="totalDoorJambsCount" class="badge bg-primary">1</span>
+              </li>
+              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                Total Window Sills:
+                <span id="totalWndwSillsCount" class="badge bg-primary">1</span>
+              </li>
+              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                Total Doors (Interior):
+                <span id="totalIntDoorsCount" class="badge bg-primary">1</span>
+              </li>
+              <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                Total Doors (Exterior):
+                <span id="totalExtDoorsCount" class="badge bg-primary">1</span>
+              </li>
 
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -84,147 +120,296 @@
 
     <!-- Area Modal -->
     <div class="modal" id="areaModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-fullscreen-xl-down modal-xl" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content rounded-3 shadow">
                 <div class="modal-header">
-                    <h5 class="modal-title">Area Details</h5>
+                    <h5 class="modal-title">Area Entry Form</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal">
                         <span>&times;</span>
                     </button>
                 </div>
-                <form id="areaForm">
+                <form id="areaForm" class="modal-form">
                 <div class="modal-body p-3">
                   
-                      <div class="row">
+                      <div class="row align-items-start justify-content-evenly">
                           <!-- Left column for input fields -->
-                          <div class="col-md-6 col-sm-12">
-                              <div class="form-group">
-                                  <label for="areaName">Name</label>
-                                  <input type="text" class="form-control" id="areaName" required>
+                          <div class="col-md-6 col-sm-12 row align-items-start" id="area-form-left-column">
+                            <h5>Area / Room Details</h5>
+                            <hr>
+                              <div class="col-12">
+                                <label for="areaName">Area / Room Name</label>
+                                <input type="text" class="form-control" id="areaName" required>
                               </div>
-                              <div class="row">
-                                <div class="col-4">
-                                  <div class="form-group">
-                                    <label for="areaLength">Length</label>
-                                    <input type="number" class="form-control" id="areaLength" required>
-                                  </div>
-                                </div>
-                                <div class="col-4">
-                                  <div class="form-group">
-                                    <label for="areaWidth">Width</label>
-                                    <input type="number" class="form-control" id="areaWidth" required>
-                                  </div>
-                                </div>
-                                <div class="col-4">
-                                  <div class="form-group">
-                                    <label for="areaHeight">Height</label>
-                                    <input type="number" class="form-control" id="areaHeight" required>
-                                  </div>
-                                </div> 
-                              </div>  
-                              <div class="row">
-                                <div class="col-4">
-                                  <div class="form-group">
-                                    <label for="areaDoors">Doors</label>
-                                    <input type="number" class="form-control" id="areaDoors">
-                                  </div>
-                                </div>
-                                <div class="col-4">
-                                  <div class="form-group">
-                                    <label for="areaJambs">Jambs</label>
-                                    <input type="number" class="form-control" id="areaJambs">
-                                  </div>
-                                </div>
-                                <div class="col-4">
-                                  <div class="form-group">
-                                    <label for="areaWindows">Windows</label>
-                                    <input type="number" class="form-control" id="areaWindows">
-                                  </div>
-                                </div> 
-                              </div>  
-                              <div class="form-group">
-                                  <label for="areaNameDesc">Additional Notes</label>
-                                  <textarea rows="3" class="form-control" id="areaNameDesc"></textarea>
+                              <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                <label for="areaLength">Length</label>
+                                <input type="number" class="form-control text-center" id="areaLength" required>
                               </div>
-                          </div>
-                          <!-- Right column for calculated fields and checkboxes -->
-                          <div class="col-md-3 col-sm-12">
+                              <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                <label for="areaWidth">Width</label>
+                                <input type="number" class="form-control text-center" id="areaWidth" required>
+                              </div>
+                              <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                <label for="areaHeight">Height</label>
+                                <input type="number" class="form-control text-center" id="areaHeight" required>
+                              </div> 
+                              <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                <label for="areaWindows">Doors [Int]</label>
+                                <input type="number" class="form-control text-center" id="areaWindows">
+                              </div> 
+                              <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                <label for="areaDoors">Doors [Ext]</label>
+                                <input type="number" class="form-control text-center" id="areaDoors">
+                              </div>
+                              <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                <label for="areaJambs">Jambs</label>
+                                <input type="number" class="form-control text-center" id="areaJambs">
+                              </div>
+                              <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                <label for="areaWindows">Windows</label>
+                                <input type="number" class="form-control text-center" id="areaWindows">
+                              </div> 
                               
+                              <div class="col-lg-12">
+                                <label for="areaNameDesc">Additional Notes</label>
+                                <textarea rows="3" class="form-control" id="areaNameDesc"></textarea>
+                              </div>
+                              
+                              <!-- Extra Fields to Show with Toggle -->
+                              
+                                <div class="form-switch row align-items-center my-2">
+                                  <input class="form-check-input m-0 p-0 col-1" type="checkbox" id="toggleExtraFields">
+                                  <label class="col" for="toggleExtraFields">Toggle Extra Fields</label>
+                                </div>
+                                
+                              
+                              
+                              <div id="extraFields" style="display:none;">
+                                <div class="row mb-3">
+                                <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                  <label for="ponyWallsLnFt">Pony [LF]</label>
+                                  <input type="number" class="form-control text-center" id="ponyWallsLnFt">
+                                </div> 
+                                <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                  <label for="windowSeatsLnFt">W.Seat [LF]</label>
+                                  <input type="number" class="form-control text-center" id="windowSeatsLnFt">
+                                </div> 
+                                <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                  <label for="shelvingLnFt">Shelf [LF]</label>
+                                  <input type="number" class="form-control text-center" id="shelvingLnFt">
+                                </div> 
+                                <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                  <label for="areaWindows">Windows</label>
+                                  <input type="number" class="form-control text-center" id="areaWindows">
+                                </div> 
+                                <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                  <label for="areaWindows">Windows</label>
+                                  <input type="number" class="form-control text-center" id="areaWindows">
+                                </div> 
+                                <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                  <label for="areaWindows">Windows</label>
+                                  <input type="number" class="form-control text-center" id="areaWindows">
+                                </div> 
+                                </div>
+                              </div>
+                              
+                          </div>
+                          <!-- Right column for features and selections-->
+                          <div class="col-md-6 col-sm-12 row align-items-start" id="area-form-right-column">
+                            <h5>Features &amp; Selections</h5>
+                            <hr>
                               <!-- Feature Toggles -->
-                              <h5>Room Features</h5>
-                              <div class="form-group">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" id="hasBaseboards">
-                                      <label class="form-check-label" for="hasBaseboards">
-                                          Baseboards
-                                      </label>
+                              <div class="mb-2 col-sm-12 row row-cols-1">
+                                <h5>Features</h5>
+                                  
+                                  <div class="input-group ms-2 mb-1 row g-0">
+                                    <label class="input-group-text col-9" for="wallPercent">Walls Percent</label>
+                                    <input type="number" class="form-control col-2 text-center" id="wallPercent" value="100">
+                                    <label class="input-group-text col-1" for="wallPercent">%</label>
                                   </div>
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" id="hasCrown">
-                                      <label class="form-check-label" for="hasCrown">
-                                          Crown Molding
-                                      </label>
+                                  <div class="input-group ms-2 mb-1 row g-0">
+                                    <div class="input-group-text form-switch col-2 justify-content-center">
+                                        <input class="form-check-input m-0" type="checkbox" id="hasBaseboards">
+                                    </div>
+                                    <label class="input-group-text col-7" for="hasBaseboards">Baseboards</label>
+                                    <input type="number" class="form-control col-2 text-center" id="basePercent" value="100">
+                                    <label class="input-group-text col-1" for="basePercent">%</label>
                                   </div>
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" id="hasChairRail">
-                                      <label class="form-check-label" for="hasChairRail">
-                                          Chair Rail
-                                      </label>
-                                  </div>  
+                                  <div class="input-group ms-2 mb-1 row g-0">
+                                    <div class="input-group-text form-switch col-2 justify-content-center">
+                                        <input class="form-check-input m-0" type="checkbox" id="hasCrown">
+                                    </div>
+                                    <label class="input-group-text col-7" for="hasCrown">Crown</label>
+                                    <input type="number" class="form-control col-2 text-center" id="crownPercent" value="100">
+                                    <label class="input-group-text col-1" for="crownPercent">%</label>
+                                  </div>
+                                  <div class="input-group ms-2 mb-1 row g-0">
+                                    <div class="input-group-text form-switch col-2 justify-content-center">
+                                        <input class="form-check-input m-0" type="checkbox" id="hasChairRail">
+                                    </div>
+                                    <label class="input-group-text col-7" for="hasChairRail">Chair Rail</label>
+                                    <input type="number" class="form-control col-2 text-center" id="cRailPercent" value="100">
+                                    <label class="input-group-text col-1" for="cRailPercent">%</label>
+                                  </div>
+                                  <div class="input-group ms-2 mb-1 row g-0">
+                                    <div class="input-group-text form-switch col-2 justify-content-center">
+                                        <input class="form-check-input m-0" type="checkbox" id="twoStory">
+                                    </div>
+                                    <label class="input-group-text col-10" for="twoStory">2-Story Height</label>
+                                  </div>
+                                  <!-- Toggle Cabinetry -->                                  
+                                  <div class="input-group ms-6 mb-1 row g-0 justify-content-center">
+                                    <div class="input-group-text form-switch col-2 justify-content-center">
+                                        <input class="form-check-input m-0" type="checkbox" id="addCabinets">
+                                    </div>
+                                    <label class="input-group-text col-7" for="addCabinets">Add Cabinetry Measurements</label>
+                                  </div>
+                                  <div id="toggleCabinetry" class="row g-0" style="display:none;">
+                                    <div class="input-group ms-2 mb-1 row g-0">                                      
+                                      <label class="input-group-text col-4">Base Cabinetry</label>
+                                      <input type="number" class="form-control col-2 text-center" id="baseCabLength" value="0">
+                                      <label class="input-group-text col-2" for="baseCabLength">LnFt</label>
+                                      <input type="number" class="form-control col-2 text-center" id="baseCabHeight" value="3">
+                                      <label class="input-group-text col-2" for="baseCabHeight">(H)Ft</label>
+                                    </div>
+                                    <div class="input-group ms-2 mb-1 row g-0">                                      
+                                      <label class="input-group-text col-4">Upper Cabinetry</label>
+                                      <input type="number" class="form-control col-2 text-center" id="upperCabLength" value="0">
+                                      <label class="input-group-text col-2" for="upperCabLength">LnFt</label>
+                                      <input type="number" class="form-control col-2 text-center" id="upperCabHeight" value="4">
+                                      <label class="input-group-text col-2" for="upperCabHeight">(H)Ft</label>
+                                    </div>
+                                    <div class="input-group ms-2 mb-1 row g-0">                                      
+                                      <label class="input-group-text col-4">Full Cabinetry</label>
+                                      <input type="number" class="form-control col-2 text-center" id="fullCabLength" value="0">
+                                      <label class="input-group-text col-2" for="fullCabLength">LnFt</label>
+                                      <input type="number" class="form-control col-2 text-center" id="fullCabHeight" value="8">
+                                      <label class="input-group-text col-2" for="fullCabHeight">(H)Ft</label>
+                                    </div>
+                                  </div>
+                                 
                               </div>
                               <!-- Scope Selections -->
-                              <h5>Scope Group Selections</h5>
-                              <div class="form-group">
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" id="paintWalls">
-                                      <label class="form-check-label" for="paintWalls">
-                                          Paint Walls
-                                      </label>
+                              <div class="mb-2 col-sm-12 row row-cols-1">
+                                <h5>Selections</h5>
+                                  <div class="input-group ms-2 mb-1 row g-0">
+                                    <label class="input-group-text col-10" for="paintWalls">Paint Walls</label>
+                                    <div class="input-group-text form-switch col-2 justify-content-center">
+                                      <input class="form-check-input m-0" type="checkbox" id="paintWalls">
+                                    </div>
                                   </div>
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" id="paintCeiling">
-                                      <label class="form-check-label" for="paintCeiling">
-                                          Paint Ceiling  
-                                      </label>
-                                  </div>
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" id="paintTrim">
-                                      <label class="form-check-label" for="paintTrim">
-                                          Paint Trim
-                                      </label>
+                                  <div class="input-group ms-2 mb-1 row g-0">
+                                    <label class="input-group-text col-10" for="paintCeiling">Paint Ceiling</label>
+                                    <div class="input-group-text form-switch col-2 justify-content-center">
+                                      <input class="form-check-input m-0" type="checkbox" id="paintCeiling">
+                                    </div>
                                   </div>  
-                                  <div class="form-check">
-                                      <input class="form-check-input" type="checkbox" id="paintDoors">
-                                      <label class="form-check-label" for="paintDoors">
-                                          Paint Doors
-                                      </label>
+                                  <div class="input-group ms-2 mb-1 row g-0">
+                                    <label class="input-group-text col-10" for="paintTrim">Paint Trim &amp; Jambs</label>
+                                    <div class="input-group-text form-switch col-2 justify-content-center">
+                                      <input class="form-check-input m-0" type="checkbox" id="paintTrim">
+                                    </div>
                                   </div>  
+                                  <div class="input-group ms-2 mb-1 row g-0">
+                                    <label class="input-group-text col-10" for="paintDoors">Paint Doors</label>
+                                    <div class="input-group-text form-switch col-2 justify-content-center">
+                                      <input class="form-check-input m-0" type="checkbox" id="paintDoors">
+                                    </div>
+                                  </div>  
+                                  <div class="input-group ms-2 mb-1 row g-0">
+                                    <label class="input-group-text col-10" for="paintClosets">Paint Closets</label>
+                                    <div class="input-group-text form-switch col-2 justify-content-center">
+                                      <input class="form-check-input m-0" type="checkbox" id="paintClosets">
+                                    </div>
+                                  </div>  
+                                  <div class="input-group ms-2 mb-1 row g-0">
+                                    <label class="input-group-text col-8" for="accentWall">Paint Accent Wall</label>
+                                    <input type="number" class="form-control col-2 text-center" id="numAccentWalls" value="1">
+                                    <div class="input-group-text form-switch col-2 justify-content-center">
+                                      <input class="form-check-input m-0" type="checkbox" id="accentWall">
+                                    </div>
+                                  </div>  
+
                               </div>
                           </div>
-                          <div class="col-md-3 col-sm-12">
+                          <hr>
+                          <!-- Bottom section for calculations -->
+                          <div class="col-md-12 col-sm-12 row align-items-start justify-content-center" id="area-form-bottom-section">
 
-                            <!-- Calculated Values -->
-                              <h5>Calculated Values</h5>
-                              <div class="form-group row mb-1">
-                                  <label class="col-sm-6 text-left measurement">Wall SF:</label>
-                                  <div class="col-sm-6"><p id="wallSqFt" class="text-left measurement"></p></div>
+                            <!-- Autopopulated Calculated Values -->
+                            <h5>Calculated Values</h5>
+
+                              <div class="mt-1 col-md-6 col-sm-12 row">
+                                <ul class="list-group mt-1 pe-2">
+                                  <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                                    <span class="w-100">Wall Surface to Paint</span>
+                                    <span class="badge bg-primary" id="wallSqFt">0</span>
+                                    <span class="badge bg-secondary ms-1">SqFt</span>
+                                  </li>
+                                  <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                                    <span class="w-100">Accent Wall Surface</span>
+                                    <span class="badge bg-primary" id="accentWallSqFt">0</span>
+                                    <span class="badge bg-secondary ms-1">SqFt</span>
+                                  </li>
+                                  <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                                    <span class="w-100">Ceiling Surface to Paint</span>
+                                    <span class="badge bg-primary" id="ceilingSqFt">0</span>
+                                    <span class="badge bg-secondary ms-1">SqFt</span>
+                                  </li>
+                                  <li class="list-group-item list-group-item-secondary d-flex align-items-center">
+                                    <span class="w-100">Area Perimeter</span>
+                                    <span class="badge bg-primary" id="areaPerimeter">0</span>
+                                    <span class="badge bg-secondary ms-1">LnFt</span>
+                                  </li>
+                                </ul>
                               </div>
-                              <div class="form-group row mb-1">
-                                  <label class="col-sm-6 text-left measurement">Ceiling SF:</label>
-                                  <div class="col-sm-6"><p id="ceilingSqFt" class="text-left measurement"></p></div>
+
+                              <div class="mt-1 col-md-6 col-sm-12 row">
+                                <ul class="list-group mt-1 pe-2">
+                                  <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                                    <span class="w-100">Baseboard Linear Footage</span>
+                                    <span class="badge bg-primary" id="baseLnFt">0</span>
+                                    <span class="badge bg-secondary ms-1">LnFt</span>
+                                  </li>
+                                  <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                                    <span class="w-100">Crown Linear Footage</span>
+                                    <span class="badge bg-primary" id="crownLnFt">0</span>
+                                    <span class="badge bg-secondary ms-1">LnFt</span>
+                                  </li>
+                                  <li class="list-group-item list-group-item-secondary d-flex align-items-center">
+                                    <span class="w-100">Chair Linear Footage</span>
+                                    <span class="badge bg-primary" id="chairRailLnFt">0</span>
+                                    <span class="badge bg-secondary ms-1">LnFt</span>
+                                  </li>
+                                  <li class="list-group-item list-group-item-secondary d-flex align-items-center">
+                                    <span class="w-100">Cabinetry Facial SqFt</span>
+                                    <span class="badge bg-primary" id="cabSqFt">0</span>
+                                    <span class="badge bg-secondary ms-1">SqFt</span>
+                                  </li>
+                                  <!-- <li class="list-group-item list-group-item-secondary d-flex align-items-center">
+                                    <span class="w-100">Chair Linear Footage</span>
+                                    <span class="badge bg-primary" id="chairRailLnFt">0</span>
+                                    <span class="badge bg-secondary ms-1">LnFt</span>
+                                  </li>
+                                  <li class="list-group-item list-group-item-secondary d-flex align-items-center">
+                                    <span class="w-100">Chair Linear Footage</span>
+                                    <span class="badge bg-primary" id="chairRailLnFt">0</span>
+                                    <span class="badge bg-secondary ms-1">LnFt</span>
+                                  </li> -->
+                                </ul>
                               </div>
-                              <div class="form-group row mb-1">
-                                  <label class="col-sm-6 text-left measurement">Perimeter LF:</label>
-                                  <div class="col-sm-6"><p id="areaPerimeter" class="text-left measurement"></p></div>
-                              </div>
+
+                            <div class="col-lg-12 date-reference text-center mt-3">
+                              <label class="form-text">Area Created &nbsp;&gt;&gt;&nbsp;</label>
+                              <span id="createdDate" class="form-text" ></label>
+                            </div>
 
                           </div>
                       </div>
-                      <small id="createdDate" class="form-text text-muted" style="font-style: italic; text-align: right; flex-grow: 1;"></small>
+                      
                   
                 </div>
                 <div class="modal-footer flex-nowrap p-0">
-                  <button type="submit" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0 border-end" id="saveAreaBtn"><strong>SAVE</strong></button>
+                  <button type="submit" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0" id="saveAreaBtn">SAVE AREA</button>
                   <button type="button" class="btn btn-lg btn-link fs-6 text-decoration-none col-6 py-3 m-0 rounded-0" data-bs-dismiss="modal">CANCEL</button>
                 </div>
                 </form>
@@ -263,16 +448,16 @@
 
     <!-- Toast Container  --> 
     <!-- Flexbox container for aligning the toasts -->
-    <div aria-live="polite" aria-atomic="true" class="d-flex justify-content-center align-items-center w-100">
+    <div id="toastContainer" aria-live="polite" aria-atomic="true" class="toast-container position-fixed top-0 end-0 p-3">
       <!-- Then put toasts within -->
-      <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
         <div class="toast-header">
-          <img src="..." class="rounded me-2" alt="...">
+          <!-- <img src="..." class="rounded me-2" alt="..."> -->
           <strong class="me-auto">Notification</strong>
           <small>just now</small>
           <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
-        <div class="toast-body">
+        <div class="toast-body" id="toast-body">
           <!-- Toast message content goes here -->
         </div>
       </div>
@@ -302,13 +487,14 @@
     </div>
     <!-- End of Confirmation Modal -->
 
+  
 
-
-
+    <!-- SCRIPTS: Bootstrap JS, jQuery, Popper, Custom JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <!-- <script src="https://unpkg.com/@popperjs/core@2"></script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="./src/script.js"></script>
     
+  
 </body>
 </html>

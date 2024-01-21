@@ -2,31 +2,42 @@
 
 document.addEventListener('DOMContentLoaded', function() {
   
+  // Assign & Initialize Variables
   const areasTable = document.getElementById('areasTable').querySelector('tbody');
   const areaForm = document.getElementById('areaForm');
   const customerForm = document.getElementById('customerForm');
-  let editIndex = -1; // Index of the area being edited
+  let editAreaIndex = -1; // Create index of the area being edited
   let editCustomerIndex = -1; // Index of the customer being edited
+  let userSettings = JSON.parse(localStorage.getItem('userSettings')) || {};
 
-  // New customer selection logic
+  // Customer Selection Logic
   const customerSelect = document.getElementById('customerSelect');
   let customers = JSON.parse(localStorage.getItem('customers')) || [
-    {
-      name: '<< PLEASE SELECT CUSTOMER >>',
-      address: '',
-      areas: []
-    }
-  ];
-  // const areas = JSON.parse(localStorage.getItem('customers').areas) || [];
-  let selCustIndex = 0; // Default to the first customer
+      {
+        name: '<< PLEASE CREATE CUSTOMER >>',
+        address: '',
+        areas: []
+      }
+    ];
+  
+  
+  // incase it needs to be converted.
+  // let selCustIndex = parseInt(userSettings.lastCustSelected.value, 10) || 0; 
+  let selCustIndex = userSettings.lastCustSelected.value || 0;
+  
+  
   let selectedCustomerAreas = customers[selCustIndex].areas;
-
-
+  
+  
   customerSelect.addEventListener('change', function() {
     selCustIndex = parseInt(this.value, 10);
     selectedCustomerAreas = customers[selCustIndex].areas;
     renderAreas(selCustIndex);
     updateSummaryTotals(selectedCustomerAreas);
+    userSettings = {
+      lastCustSelected: selCustIndex
+      };
+    localStorage.setItem('userSettings', JSON.stringify(userSettings));
   });
 
 
@@ -139,11 +150,6 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('areaHeight').addEventListener('input', calculateAndDisplay);
 
 
-  customerSelect.addEventListener('change', function() {
-    selCustIndex = parseInt(this.value, 10);
-    renderAreas(selCustIndex);
-    updateSummaryTotals(selectedCustomerAreas);
-  });
 
 
   // Function to calculate and update summary totals
@@ -152,24 +158,19 @@ document.addEventListener('DOMContentLoaded', function() {
     let totalWallSqFtSelected = 0;
     let totalCeilingSqFt = 0;
     let totalCeilingSqFtSelected = 0;
-    // let totalAreaPerimeter = 0;
-    // let totalAreaPerimeterSelected = 0;
-    // let totalDoorsCount = 0;
     let totalDoorsCountSelected = 0;
-    // let totalJambsCount = 0;
     let totalJambsCountSelected = 0;
-    // let totalWindowsCount = 0;
     let totalWindowsCountSelected = 0;
-    // let totalBaseLength = 0;
     let totalBaseLengthSelected = 0;
-    // let totalCrownLength = 0;
     let totalCrownLengthSelected = 0;
-    // let totalChairRailLength = 0;
     let totalChairRailLengthSelected = 0;
 
     areas.forEach(area => {
       totalWallSqFt += area.areaCalculations.wallSqFt;
       totalCeilingSqFt += area.areaCalculations.ceilingSqFt;
+
+      // Prepare for future variable of trim size modifier
+
 
       // Check if the toggles are set to true and add to selected totals
       if (area.paintWalls) totalWallSqFtSelected += area.areaCalculations.wallSqFt;
@@ -183,26 +184,18 @@ document.addEventListener('DOMContentLoaded', function() {
       // console.log(area.areaCalculations.ceilingSqFt);
     });
 
-    // Update the HTML with the new totals
-    // document.getElementById('totalWallSqFt').textContent = totalWallSqFt;
-    document.getElementById('totalWallSqFtSelected').textContent = totalWallSqFtSelected;
-    // document.getElementById('totalCeilingSqFt').textContent = totalCeilingSqFt;
-    document.getElementById('totalCeilingSqFtSelected').textContent = totalCeilingSqFtSelected;
-  
-    // document.getElementById('totalDoorsCount').textContent = totalDoorsCount;
-    document.getElementById('totalDoorsCountSelected').textContent = totalDoorsCountSelected;
-    // document.getElementById('totalJambsCount').textContent = totalJambsCount;
-    document.getElementById('totalJambsCountSelected').textContent = totalJambsCountSelected;
-    // document.getElementById('totalWindowsCount').textContent = totalWindowsCount;
-    document.getElementById('totalWindowsCountSelected').textContent = totalWindowsCountSelected;
-    // document.getElementById('totalBaseLength').textContent = totalBaseLength;
-    document.getElementById('totalBaseLengthSelected').textContent = totalBaseLengthSelected;
-    // document.getElementById('totalCrownLength').textContent = totalCrownLength;
-    document.getElementById('totalCrownLengthSelected').textContent = totalCrownLengthSelected;
-    // document.getElementById('totalChairRailLength').textContent = totalChairRailLength;
-    document.getElementById('totalChairRailLengthSelected').textContent = totalChairRailLengthSelected;
+    // Update the #summary-card with the new totals
     
-
+    document.getElementById('totalWallSqFt').textContent = totalWallSqFtSelected;
+    document.getElementById('totalCeilingSqFt').textContent = totalCeilingSqFtSelected;
+    document.getElementById('totalBaseboardLnFt').textContent = totalBaseLengthSelected;
+    document.getElementById('totalCrownLnFt').textContent = totalCrownLengthSelected;
+    document.getElementById('totalChairRailLnFt').textContent = totalChairRailLengthSelected;
+    document.getElementById('totalDoorJambsCount').textContent = totalJambsCountSelected;
+    document.getElementById('totalWndwSillsCount').textContent = totalWindowsCountSelected;
+    document.getElementById('totalIntDoorsCount').textContent = totalDoorsCountSelected;
+    document.getElementById('totalExtDoorsCount').textContent = totalDoorsCountSelected;
+    
 
 
 
@@ -249,11 +242,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
       };
 
-      if (editIndex === -1) {
+      if (editAreaIndex === -1) {
         customers[selCustIndex].areas.push(newArea);
       } else {
-        customers[selCustIndex].areas[editIndex] = newArea;
-        editIndex = -1;
+        customers[selCustIndex].areas[editAreaIndex] = newArea;
+        editAreaIndex = -1;
       }
       localStorage.setItem('customers', JSON.stringify(customers));
       $('#areaModal').modal('hide');
@@ -332,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
 
       calculateAndDisplay();
-      editIndex = areaIndex;
+      editAreaIndex = areaIndex;
       $('#areaModal').modal('show');
       updateSummaryTotals(selectedCustomerAreas);
   };
@@ -391,12 +384,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   function showToast(message) {
-    const toastElement = document.getElementById('toast');
-    const toastBody = toastElement.querySelector('.toast-body');
+    const toast = document.getElementById('toast');
+    const toastBody = document.getElementById('toast-body');
     toastBody.textContent = message;
-    const toast = new bootstrap.Toast(toastElement);
-    toast.show();
+    toast.classList.add('show');
+    setTimeout(function() {
+      toast.classList.remove('show');
+    }, 8000);
+
   }
+
+  // Toggle Extra Fields in Area Modal
+  document.getElementById('addCabinets').addEventListener('change', function() {
+    document.getElementById('toggleCabinetry').style.display = this.checked ? 'block' : 'none';
+  });
+
+  document.getElementById('toggleExtraFields').addEventListener('change', function() {
+    document.getElementById('extraFields').style.display = this.checked ? 'block' : 'none';
+  });
 
 
   // Theme toggle button
@@ -415,6 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark-mode');
   }
+
 
 });
  
