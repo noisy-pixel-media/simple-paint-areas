@@ -62,9 +62,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   
-  
-  
-
+  // Save Customer Form
   customerForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const customerName = document.getElementById('customerName').value;
@@ -92,13 +90,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   
-
+  // Clear Customer Entry Form Function
   function clearCustomerForm() {
     document.getElementById('customerName').value = '';
     document.getElementById('customerAddress').value = '';
     editCustomerIndex = -1;
   }
-
+  // Edit Customer Form Load
   window.editCustomer = function(index) {
     const customer = customers[index];
     document.getElementById('customerName').value = customer.name;
@@ -121,10 +119,42 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
 
-  // Variables for area calculations - Define at document level to persist
+
+  // Set global variables for area calculations - Define at document level to persist
+  let aName = ''
+  let aNameDesc = ''
   let aLength = 0;
   let aWidth = 0;
   let aHeight = 0;
+  let aDoorsInt = 0;
+  let aDoorsExt = 0;
+  let aJambs = 0;
+  let aWindows = 0;
+  let aPonyWallsLnFt = 0;
+  let aWindowSeatsLnFt = 0;
+  let aShelvingLnFt = 0;
+  let aWallPercent = 0;
+  let aHasBaseboards = false;
+  let aBasePercent = 0;
+  let aHasCrown = false;
+  let aCrownPercent = 0;
+  let aHasChairRail = false;
+  let aCRailPercent = 0;
+  let aTwoStory = false;
+  let aBaseCabLength = 0;
+  let aBaseCabHeight = 0;
+  let aUpperCabLength = 0;
+  let aUpperCabHeight = 0;
+  let aFullCabLength = 0;
+  let aFullCabHeight = 0;
+  let aPaintWalls = false;
+  let aPaintCeiling = false;
+  let aPaintTrim = false;
+  let aPaintDoors = false;
+  let aAccentWall = false;
+  let aNumAccentWalls = 0;
+  
+
   let calcWallSqFt = 0;
   let calcCeilingSqFt = 0;
   let calcAreaPerimeter = 0;
@@ -206,13 +236,43 @@ document.addEventListener('DOMContentLoaded', function() {
   // Function to add a new area or update an existing one
   areaForm.addEventListener('submit', function(e) {
       e.preventDefault();
-      // let formAreaLength = parseFloat(document.getElementById('areaLength').value);
-      // let formAreaWidth = parseFloat(document.getElementById('areaWidth').value);
-      // let formAreaHeight = parseFloat(document.getElementById('areaHeight').value);
+      aLength = parseFloat(document.getElementById('areaLength').value);
+      aWidth = parseFloat(document.getElementById('areaWidth').value);
+      aHeight = parseFloat(document.getElementById('areaHeight').value);
+      aDoorsInt = parseFloat(document.getElementById('areaDoorsInt').value);
+      aDoorsExt = parseFloat(document.getElementById('areaDoorsExt').value);
+      aJambs = parseFloat(document.getElementById('areaJambs').value);
+      aWindows = parseFloat(document.getElementById('areaWindows').value);
+      aPonyWallsLnFt = parseFloat(document.getElementById('ponyWallsLnFt').value);
+      aWindowSeatsLnFt = parseFloat(document.getElementById('windowSeatsLnFt').value);
+      aShelvingLnFt = parseFloat(document.getElementById('shelvingLnFt').value);
+      aWallPercent = parseFloat(document.getElementById('wallPercent').value);
+      hasBaseboards = document.getElementById('hasBaseboards').checked;
+      hasCrown = document.getElementById('hasCrown').checked;
+      hasChairRail = document.getElementById('hasChairRail').checked;
+      aBasePercent = parseFloat(document.getElementById('basePercent').value);
+      aCrownPercent = parseFloat(document.getElementById('crownPercent').value);
+      aChairRailPercent = parseFloat(document.getElementById('chairRailPercent').value);
+      aNameDesc = document.getElementById('areaNameDesc').value;
+      aTwoStory = document.getElementById('twoStory').checked;
+      aBaseCabLength = parseFloat(document.getElementById('baseCabLength').value);
+      aBaseCabHeight = parseFloat(document.getElementById('baseCabHeight').value);
+      aUpperCabLength = parseFloat(document.getElementById('upperCabLength').value);
+      aUpperCabHeight = parseFloat(document.getElementById('upperCabHeight').value);
+      aFullCabLength = parseFloat(document.getElementById('fullCabLength').value);
+      aFullCabHeight = parseFloat(document.getElementById('fullCabHeight').value);
+      aPaintWalls = document.getElementById('paintWalls').checked;
+      aPaintCeiling = document.getElementById('paintCeiling').checked;
+      aPaintTrim = document.getElementById('paintTrim').checked;
+      aPaintDoors = document.getElementById('paintDoors').checked;
+      aNumAccentWalls = parseFloat(document.getElementById('numAccentWalls').value);
+      aAccentWall = document.getElementById('accentWall').checked;
+
+
       calculateAndDisplay();
       const newArea = {
-          areaName: document.getElementById('areaName').value,
-          areaNameDesc: document.getElementById('areaNameDesc').value,
+          areaName: aName,
+          areaNameDesc: aNameDesc,
           areaDimensions: {
               areaLength: aLength,
               areaWidth: aWidth,
