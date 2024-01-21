@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   
   // Assign & Initialize Variables
-  const areasTable = document.getElementById('areasTable').querySelector('tbody');
+  const areasList = document.getElementById('areasList');
   const areaForm = document.getElementById('areaForm');
   const customerForm = document.getElementById('customerForm');
   const customerSelect = document.getElementById('customerSelect');
@@ -159,6 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let aPaintCeiling = false;
   let aPaintTrim = false;
   let aPaintDoors = false;
+  let aPaintClosets = false;
   let aAccentWall = false;
   let aNumAccentWalls = 0;
   
@@ -178,9 +179,9 @@ document.addEventListener('DOMContentLoaded', function() {
       aLength = parseFloat(document.getElementById('areaLength').value) || 0;
       aWidth = parseFloat(document.getElementById('areaWidth').value) || 0;
       aHeight = parseFloat(document.getElementById('areaHeight').value) || 0;
-      // aDoorsInt = parseFloat(document.getElementById('areaDoorsInt').value) || 0;
-      // aDoorsExt = parseFloat(document.getElementById('areaDoorsExt').value) || 0;
-      // aJambs = parseFloat(document.getElementById('areaJambs').value) || 0;
+      aDoorsInt = parseFloat(document.getElementById('areaDoorsInt').value) || 0;
+      aDoorsExt = parseFloat(document.getElementById('areaDoorsExt').value) || 0;
+      aJambs = parseFloat(document.getElementById('areaJambs').value) || 0;
       // aWindows = parseFloat(document.getElementById('areaWindows').value) || 0;
       // aPonyWallsLnFt = parseFloat(document.getElementById('ponyWallsLnFt').value) || 0;
       // aWindowSeatsLnFt = parseFloat(document.getElementById('windowSeatsLnFt').value) || 0;
@@ -203,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
       // aPaintCeiling = document.getElementById('paintCeiling').checked;
       // aPaintTrim = document.getElementById('paintTrim').checked;
       // aPaintDoors = document.getElementById('paintDoors').checked;
-      // aAccentWall = document.getElementById('accentWall').checked;
+      // aAccentWall = document.getElementById('hasAccentWall').checked;
       aNumAccentWalls = parseFloat(document.getElementById('numAccentWalls').value) || 0; 
       
       calcAreaPerimeter = (aLength + aWidth) * 2;
@@ -252,21 +253,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Function to calculate and update summary totals
   function updateSummaryTotals(areas) {
-    let totalWallSqFt = 0;
+    // let totalCeilingSqFt = 0;
+    // let totalWallSqFt = 0;
     let totalWallSqFtSelected = 0;
-    let totalCeilingSqFt = 0;
     let totalCeilingSqFtSelected = 0;
-    let totalDoorsCountSelected = 0;
+    let totalIntDoorsCountSelected = 0;
+    let totalExtDoorsCountSelected = 0;
     let totalJambsCountSelected = 0;
     let totalWindowsCountSelected = 0;
     let totalBaseLengthSelected = 0;
     let totalCrownLengthSelected = 0;
     let totalChairRailLengthSelected = 0;
-
+    let totalPonyWallsLengthSelected = 0;
+    let totalWindowSeatsLengthSelected = 0;
+    let totalShelvingLengthSelected = 0;
+    let totalCabinetFacialSqFtSelected = 0;
+    // let totalClosetsSmCountSelected = 0;
+    // let totalClosetsMdCountSelected = 0;
+    // let totalClosetsLgCountSelected = 0;
+    
     areas.forEach(area => {
-      totalWallSqFt += area.areaCalculations.wallSqFt;
-      totalCeilingSqFt += area.areaCalculations.ceilingSqFt;
-
       // Prepare for future variable of trim size modifier
 
 
@@ -277,7 +283,8 @@ document.addEventListener('DOMContentLoaded', function() {
       if (area.paintTrim && area.areaFeatures.hasChairRail) totalChairRailLengthSelected += area.areaCalculations.areaPerimeter * 1.7;
       if (area.paintTrim && area.areaFeatures.hasCrown) totalCrownLengthSelected += area.areaCalculations.areaPerimeter;
       if (area.paintTrim && area.areaCounts.areaJambs.length>0) totalJambsCountSelected += area.areaCounts.areaJambs;
-      if (area.paintDoors && area.areaCounts.areaDoors.length>0) totalDoorsCountSelected += area.areaCounts.areaDoors;
+      if (area.paintDoors && area.areaCounts.areaDoorsInt.length>0) totalIntDoorsCountSelected += area.areaCounts.areaDoorsInt;
+      if (area.paintDoors && area.areaCounts.areaDoorsExt.length>0) totalExtDoorsCountSelected += area.areaCounts.areaDoorsExt;
       if (area.paintTrim && area.areaCounts.areaWindows.length>0) totalWindowsCountSelected += area.areaCounts.areaWindows;
       // console.log(area.areaCalculations.ceilingSqFt);
     });
@@ -291,8 +298,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('totalChairRailLnFt').textContent = totalChairRailLengthSelected;
     document.getElementById('totalDoorJambsCount').textContent = totalJambsCountSelected;
     document.getElementById('totalWndwSillsCount').textContent = totalWindowsCountSelected;
-    document.getElementById('totalIntDoorsCount').textContent = totalDoorsCountSelected;
-    document.getElementById('totalExtDoorsCount').textContent = totalDoorsCountSelected;
+    // document.getElementById('totalIntDoorsCount').textContent = totalDoorsCountSelected;
+    // document.getElementById('totalExtDoorsCount').textContent = totalDoorsCountSelected;
     
     
 
@@ -330,13 +337,21 @@ document.addEventListener('DOMContentLoaded', function() {
       aUpperCabHeight = parseFloat(document.getElementById('upperCabHeight').value) || 0;
       aFullCabLength = parseFloat(document.getElementById('fullCabLength').value) || 0;
       aFullCabHeight = parseFloat(document.getElementById('fullCabHeight').value) || 0;
+      aAccentWall = document.getElementById('hasAccentWall').checked;
+      aNumAccentWalls = parseFloat(document.getElementById('numAccentWalls').value) || 0;
+      
       aPaintWalls = document.getElementById('paintWalls').checked;
       aPaintCeiling = document.getElementById('paintCeiling').checked;
       aPaintTrim = document.getElementById('paintTrim').checked;
       aPaintDoors = document.getElementById('paintDoors').checked;
-      aAccentWall = document.getElementById('accentWall').checked;
-      aNumAccentWalls = parseFloat(document.getElementById('numAccentWalls').value) || 0;
-
+      aPaintClosets = document.getElementById('paintClosets').checked;
+      
+      let aCreatedDate = new Date().toLocaleString();
+      if (editAreaIndex === -1) {
+        aCreatedDate = new Date().toLocaleString()
+       } else {
+        aCreatedDate = customers[selCustIndex].createdDate
+       };
 
       calculateAndDisplay();
       const newArea = {
@@ -345,30 +360,62 @@ document.addEventListener('DOMContentLoaded', function() {
           areaDimensions: {
               areaLength: aLength,
               areaWidth: aWidth,
-              areaHeight: aHeight
+              areaHeight: aHeight,
+              ponyWallsLnFt: aPonyWallsLnFt,
+              windowSeatsLnFt: aWindowSeatsLnFt,
+              shelvingLnFt: aShelvingLnFt
           },
           areaCounts: {
-              areaDoors: parseFloat(document.getElementById('areaDoors').value),
-              areaJambs: parseFloat(document.getElementById('areaJambs').value),
-              areaWindows: parseFloat(document.getElementById('areaWindows').value)             
+              areaDoorsInt: aDoorsInt,
+              areaDoorsExt: aDoorsExt,
+              areaJambs: aJambs,
+              areaWindows: aWindows             
           },
           areaFeatures: {
-              hasBaseboards: document.getElementById('hasBaseboards').checked,
-              hasCrown: document.getElementById('hasCrown').checked,
-              hasChairRail: document.getElementById('hasChairRail').checked,
+              hasAccentWall: aAccentWall,  
+              hasBaseboards: aHasBaseboards,
+              hasCrown: aHasCrown,
+              hasChairRail: aHasChairRail,
+              isTwoStory: aTwoStory
+          },
+          areaVariables: {
+              wallPercent: aWallPercent,
+              basePercent: aBasePercent,
+              crownPercent: aCrownPercent,
+              cRailPercent: aCRailPercent,
+              numAccentWalls: aNumAccentWalls
+          },
+          areaCabinets: {
+              baseCabLength: aBaseCabLength,
+              baseCabHeight: aBaseCabHeight,
+              upperCabLength: aUpperCabLength,
+              upperCabHeight: aUpperCabHeight,
+              fullCabLength: aFullCabLength,
+              fullCabHeight: aFullCabHeight
           },
           areaCalculations: {
               wallSqFt: calcWallSqFt,
               ceilingSqFt: calcCeilingSqFt,
-              areaPerimeter: calcAreaPerimeter
-          },
-          createdDate: new Date().toLocaleString(),
-          // Read checkbox values 
-          paintWalls: document.getElementById('paintWalls').checked,
-          paintCeiling: document.getElementById('paintCeiling').checked,
-          paintTrim: document.getElementById('paintTrim').checked,  
-          paintDoors: document.getElementById('paintDoors').checked  
+              areaPerimeter: calcAreaPerimeter,
+              accentWallSqFt: calcAccentWallSqFt,
+              baseboardsSqFt: calcBaseboardsLnFt,
+              crownLnFt: calcCrownLnFt,
+              chairRailLnFt: calcChairRailLnFt,
+              cabinetFacialSqFt: calcCabinetFacialSqFt,
 
+          },
+
+          // Areas to Paint Toggles 
+          paintWalls: aPaintWalls,
+          paintCeiling: aPaintCeiling,
+          paintTrim: aPaintTrim,  
+          paintDoors: aPaintDoors, 
+          paintClosets: aPaintClosets,
+
+          // Date Time Logging
+          createdDate: aCreatedDate,
+          modifiedDate: new Date().toLocaleString()
+          
       };
 
       if (editAreaIndex === -1) {
@@ -387,33 +434,58 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Function to render areas to the table
 
+  // function renderAreas(selCustIndex) {
+  //     areasTable.innerHTML = '';
+  //     let areas = customers[selCustIndex].areas;
+  //     areas.forEach((area, index) => {
+  //         const row = areasTable.insertRow();
+  //         row.innerHTML = `
+  //           <td class="align-middle"><input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Walls')" ${area.paintWalls ? 'checked' : ''}></td>
+  //           <td class="align-middle"><input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Ceiling')" ${area.paintCeiling ? 'checked' : ''}></td>
+  //           <td class="align-middle"><input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Trim')" ${area.paintTrim ? 'checked' : ''}></td>
+  //           <td class="align-middle"><input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Doors')" ${area.paintDoors ? 'checked' : ''}></td>
+  //           <td class="align-middle">${area.areaName}</td>
+  //           <td class="align-middle">${area.areaDimensions.areaLength} ft</td>
+  //           <td class="align-middle">${area.areaDimensions.areaWidth} ft</td>
+  //           <td class="align-middle">${area.areaDimensions.areaHeight} ft</td>`+
+  //           // <td class="align-middle">${area.areaCalculations.wallSqFt} sf</td>
+  //           // <td class="align-middle">${area.areaCalculations.ceilingSqFt} sf</td>
+  //           // <td class="align-middle">${area.areaCalculations.areaPerimeter} lf</td>
+  //           `
+  //           <td>
+  //               <button class="btn btn-secondary btn-sm" onclick="editArea(${selCustIndex},${index})">Edit</button>
+  //               <button class="btn btn-danger btn-sm" onclick="deleteArea(${selCustIndex},${index})">Delete</button>
+  //           </td>
+  //           <!-- ${console.log(area, index)} -->
+  //         `;
+  //     });
+  //     console.log("Selected Customers",selectedCustomerAreas);
+  //     console.log("Rendered Areas",areas);
+  // }
+
   function renderAreas(selCustIndex) {
-      areasTable.innerHTML = '';
-      let areas = customers[selCustIndex].areas;
-      areas.forEach((area, index) => {
-          const row = areasTable.insertRow();
-          row.innerHTML = `
-            <td class="align-middle"><input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Walls')" ${area.paintWalls ? 'checked' : ''}></td>
-            <td class="align-middle"><input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Ceiling')" ${area.paintCeiling ? 'checked' : ''}></td>
-            <td class="align-middle"><input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Trim')" ${area.paintTrim ? 'checked' : ''}></td>
-            <td class="align-middle"><input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Doors')" ${area.paintDoors ? 'checked' : ''}></td>
-            <td class="align-middle">${area.areaName}</td>
-            <td class="align-middle">${area.areaDimensions.areaLength} ft</td>
-            <td class="align-middle">${area.areaDimensions.areaWidth} ft</td>
-            <td class="align-middle">${area.areaDimensions.areaHeight} ft</td>`+
-            // <td class="align-middle">${area.areaCalculations.wallSqFt} sf</td>
-            // <td class="align-middle">${area.areaCalculations.ceilingSqFt} sf</td>
-            // <td class="align-middle">${area.areaCalculations.areaPerimeter} lf</td>
-            `
-            <td>
-                <button class="btn btn-secondary btn-sm" onclick="editArea(${selCustIndex},${index})">Edit</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteArea(${selCustIndex},${index})">Delete</button>
-            </td>
-            <!-- ${console.log(area, index)} -->
-          `;
+    areasList.innerHTML = '';
+    let areas = customers[selCustIndex].areas;
+    areas.forEach((area, index) => {
+        areasList.innerHTML += `
+        <div class="col-md-12 col-lg-6 mb-2">
+          <ul class="list-group">
+            <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center" onclick="editArea(${selCustIndex},${index})">
+              <span class="w-100">${area.areaName}</span>
+              <span class="mx-1">L:</span>
+                <span class="badge bg-primary mx-1">${area.areaDimensions.areaLength}</span>
+              <span class="mx-1">W:</span>
+                <span class="badge bg-primary mx-1">${area.areaDimensions.areaWidth}</span>
+              <span class="mx-1">H:</span>
+                <span class="badge bg-primary mx-1">${area.areaDimensions.areaHeight}</span>
+              <!-- edit buttons or make entire list item clickable? -->
+            </li>
+          </ul>
+        </div>  
+        `;
       });
-      console.log("Selected Customers",selectedCustomerAreas);
-      console.log("Rendered Areas",areas);
+      // console.log("Rendered Areas",areas);
+      // console.log("Areas List",areasList);
   }
 
   window.togglePaint = function(checkbox, custIndex, areaIndex, section) {
@@ -428,30 +500,61 @@ document.addEventListener('DOMContentLoaded', function() {
   window.editArea = function(custIndex, areaIndex) {
       console.log(custIndex, areaIndex);
       const area = customers[custIndex].areas[areaIndex];
+
       document.getElementById('areaName').value = area.areaName;
       document.getElementById('areaNameDesc').value = area.areaNameDesc;
       document.getElementById('areaLength').value = area.areaDimensions.areaLength;
       document.getElementById('areaWidth').value = area.areaDimensions.areaWidth;
       document.getElementById('areaHeight').value = area.areaDimensions.areaHeight;
-      document.getElementById('areaDoors').value = area.areaCounts.areaDoors;
+      document.getElementById('ponyWallsLnFt').value = area.areaDimensions.ponyWallsLnFt;
+      document.getElementById('windowSeatsLnFt').value = area.areaDimensions.windowSeatsLnFt;
+      document.getElementById('shelvingLnFt').value = area.areaDimensions.shelvingLnFt;
+
+      document.getElementById('areaDoorsInt').value = area.areaCounts.areaDoorsInt;
+      document.getElementById('areaDoorsExt').value = area.areaCounts.areaDoorsExt;
       document.getElementById('areaJambs').value = area.areaCounts.areaJambs;
       document.getElementById('areaWindows').value = area.areaCounts.areaWindows;
-      // Set the checked state of the checkboxes
+      
+      document.getElementById('hasAccentWall').checked = area.areaFeatures.hasAccentWall;
       document.getElementById('hasBaseboards').checked = area.areaFeatures.hasBaseboards;
       document.getElementById('hasCrown').checked = area.areaFeatures.hasCrown;
       document.getElementById('hasChairRail').checked = area.areaFeatures.hasChairRail;
+      document.getElementById('twoStory').checked = area.areaFeatures.istwoStory;
+      
+      document.getElementById('wallPercent').value = area.areaVariables.wallPercent;
+      document.getElementById('basePercent').value = area.areaVariables.basePercent;
+      document.getElementById('crownPercent').value = area.areaVariables.crownPercent;
+      document.getElementById('cRailPercent').value = area.areaVariables.cRailPercent;
+      document.getElementById('numAccentWalls').value = area.areaVariables.numAccentWalls;
+      
+      document.getElementById('baseCabLength').value = area.areaCabinets.baseCabLength;
+      document.getElementById('baseCabHeight').value = area.areaCabinets.baseCabHeight;
+      document.getElementById('upperCabLength').value = area.areaCabinets.upperCabLength;
+      document.getElementById('upperCabHeight').value = area.areaCabinets.upperCabHeight;
+      document.getElementById('fullCabLength').value = area.areaCabinets.fullCabLength;
+      document.getElementById('fullCabHeight').value = area.areaCabinets.fullCabHeight;
+      
       document.getElementById('paintWalls').checked = area.paintWalls;
       document.getElementById('paintCeiling').checked = area.paintCeiling;
       document.getElementById('paintTrim').checked = area.paintTrim;
       document.getElementById('paintDoors').checked = area.paintDoors;
-
+      document.getElementById('paintClosets').checked = area.paintClosets;
+      
+      
+      
       // Show createdDate or New Entry
-      var createdDateElement = document.getElementById('createdDate');
-      if (area.createdDate) {
-          createdDateElement.textContent = `Created on: ${area.createdDate}`;
-      } else {
-          createdDateElement.textContent = 'New Entry'; // Placeholder text for new entries
-      }
+      // console.log('Created:',area.createdDate);
+      // if (area.createdDate) {
+      //   document.getElementById('createdDate').innerHTML  = area.createdDate;
+      // } else {
+      //   document.getElementById('createdDate').innerHTML  = 'New Area';
+      // };
+      // console.log('Modified:',area.modifiedDate);
+      // if (area.modifiedDate) {
+      //   document.getElementById('modifiedDate').innerHTML  = area.modifiedDate;
+      // } else {
+      //   document.getElementById('modifiedDate').innerHTML  = 'New Entry'; // Placeholder text for new entries
+      // };
 
       calculateAndDisplay();
       editAreaIndex = areaIndex;
@@ -515,7 +618,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('paintTrim').checked = false;
     document.getElementById('paintDoors').checked = false;
     document.getElementById('numAccentWalls').value = '';
-    document.getElementById('accentWall').value = '';
+    document.getElementById('hasAccentWall').value = '';
 
 
     // Reset calculated values to default display (e.g., empty or zero)
@@ -545,15 +648,54 @@ document.addEventListener('DOMContentLoaded', function() {
 
   }
 
+  // Set default values and reset as appropriate for feature toggles
+  document.getElementById('hasBaseboards').addEventListener('change', function() {
+    const basePercent = document.getElementById('basePercent');
+    if (this.checked && (basePercent.value === '' || parseInt(basePercent.value) === 0)) {basePercent.value = 100;};
+    if (!this.checked && parseInt(basePercent.value) === 100) {basePercent.value = 0;}; // Reset to 0 if unchecked and not customized
+  });
+  document.getElementById('hasCrown').addEventListener('change', function() {
+    const crownPercent = document.getElementById('crownPercent');
+    if (this.checked && (crownPercent.value === '' || parseInt(crownPercent.value) === 0)) {crownPercent.value = 100;};
+    if (!this.checked && parseInt(crownPercent.value) === 100) {crownPercent.value = 0;}; // Reset to 0 if unchecked and not customized
+  });
+  document.getElementById('hasChairRail').addEventListener('change', function() {
+    const cRailPercent = document.getElementById('cRailPercent');
+    if (this.checked && (cRailPercent.value === '' || parseInt(cRailPercent.value) === 0)) {cRailPercent.value = 100;};
+    if (!this.checked && parseInt(cRailPercent.value) === 100) {cRailPercent.value = 0;} // Reset to 0 if unchecked and not customized
+  });
+  document.getElementById('hasAccentWall').addEventListener('change', function() {
+    const numAccentWalls = document.getElementById('numAccentWalls');
+    if (this.checked && (numAccentWalls.value === '' || parseInt(numAccentWalls.value) === 0)) {numAccentWalls.value = 1;};
+    if (!this.checked && parseInt(numAccentWalls.value) === 1) {numAccentWalls.value = 0}; // Reset to 0 if unchecked and not customized
+  });
+  document.getElementById('paintWalls').addEventListener('change', function() {
+    const wallPercent = document.getElementById('wallPercent');
+    if (this.checked && (wallPercent.value === '' || parseInt(wallPercent.value) === 0)) {wallPercent.value = 100;};
+    if (!this.checked && parseInt(wallPercent.value) === 100) {wallPercent.value = 0}; // Reset to 0 if unchecked and not customized
+  })
+  document.getElementById('areaHeight').addEventListener('change', function() {
+    const areaHeight = document.getElementById('areaHeight').value || 0;
+    const hasTwoStory = document.getElementById('twoStory');
+    if (parseInt(areaHeight) > 12) {hasTwoStory.checked = true;};
+    if (parseInt(areaHeight) <= 12) {hasTwoStory.checked = false;};
+})
+
+
+
   // Toggle Extra Fields in Area Modal
   document.getElementById('addCabinets').addEventListener('change', function() {
-    document.getElementById('toggleCabinetry').style.display = this.checked ? 'block' : 'none';
+    document.getElementById('toggleCabinetry').classList.toggle('d-none', !this.checked); 
   });
 
   document.getElementById('toggleExtraFields').addEventListener('change', function() {
-    document.getElementById('extraFields').style.display = this.checked ? 'block' : 'none';
+    document.getElementById('extraFields').classList.toggle('d-none', !this.checked); 
   });
 
+  document.getElementById('showCalcSection').addEventListener('change', function() {
+    document.getElementById('area-form-calc-section').classList.toggle('d-none', !this.checked); 
+  });
+  
 
   // Theme toggle button
   const themeToggle = document.getElementById('themeToggle');
