@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', function() {
   customerForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const customerName = document.getElementById('customerName').value;
-    const customerAddress = document.getElementById('customerAddress').value;
+    const customerAddress = document.getElementById('addressAutoComplete').value;
 
     const newCustomer = {
       name: customerName,
@@ -101,14 +101,14 @@ document.addEventListener('DOMContentLoaded', function() {
   // Clear Customer Entry Form Function
   function clearCustomerForm() {
     document.getElementById('customerName').value = '';
-    document.getElementById('customerAddress').value = '';
+    document.getElementById('addressAutoComplete').value = '';
     editCustomerIndex = -1;
   }
   // Edit Customer Form Load
   window.editCustomer = function(index) {
     const customer = customers[index];
     document.getElementById('customerName').value = customer.name;
-    document.getElementById('customerAddress').value = customer.address;
+    document.getElementById('addressAutoComplete').value = customer.address;
     editCustomerIndex = index;
     $('#customerModal').modal('show');
     document.getElementById('customerName').focus();
@@ -470,15 +470,22 @@ document.addEventListener('DOMContentLoaded', function() {
         areasList.innerHTML += `
         <div class="col-md-12 col-lg-6 mb-2">
           <ul class="list-group">
-            <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center" onclick="editArea(${selCustIndex},${index})">
-              <span class="w-100">${area.areaName}</span>
-              <span class="mx-1">L:</span>
-                <span class="badge bg-primary mx-1">${area.areaDimensions.areaLength}</span>
-              <span class="mx-1">W:</span>
-                <span class="badge bg-primary mx-1">${area.areaDimensions.areaWidth}</span>
-              <span class="mx-1">H:</span>
-                <span class="badge bg-primary mx-1">${area.areaDimensions.areaHeight}</span>
+            <li class="list-group-item list-group-item-secondary d-flex align-items-center">
+              <span class="area-list-name col align-self-start" onclick="editArea(${selCustIndex},${index})">${area.areaName}</span>
+              <span class="badge bg-secondary mx-1 col-1 align-self-end">
+                W:<input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Walls')" ${area.paintWalls ? 'checked' : ''}>
+              </span>
+              <span class="badge bg-secondary mx-1 col-1 align-self-end">
+                C:<input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Ceiling')" ${area.paintCeiling ? 'checked' : ''}>
+              </span>
+              <span class="badge bg-secondary mx-1 col-1 align-self-end">
+                T:<input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Trim')" ${area.paintTrim ? 'checked' : ''}>
+              </span>
+              <span class="badge bg-primary mx-1 col-1 align-self-end">L:${area.areaDimensions.areaLength}</span>
+              <span class="badge bg-primary mx-1 col-1 align-self-end">W:${area.areaDimensions.areaWidth}</span>
+              <span class="badge bg-primary mx-1 col-1 align-self-end">H:${area.areaDimensions.areaHeight}</span>
               <!-- edit buttons or make entire list item clickable? -->
+              <button class="btn btn-danger btn-sm col-1 align-self-end" onclick="deleteArea(${selCustIndex},${index})">DEL</button>
             </li>
           </ul>
         </div>  
@@ -715,5 +722,56 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
 
+
+  
+
+
 });
  
+
+
+
+
+// Initialize Google Maps Autocomplete 
+var autocomplete;
+function initAutocomplete() {
+  autocomplete = new google.maps.places.Autocomplete(
+    document.getElementById('addressAutoComplete'),
+    {
+      types: ['geocode']
+    }
+  );
+  
+  // var streetNumberInput = document.getElementById('street_number');
+  // var streetInput = document.getElementById('route'); 
+  // var cityInput = document.getElementById('locality');
+  // var stateInput = document.getElementById('administrative_area_level_1');
+  // var zipCodeInput = document.getElementById('postal_code');
+  
+  // autocomplete.addListener('place_changed', function() {
+  //   var place = autocomplete.getPlace();
+    
+  //   // Address components
+  //   var components = place.address_components;
+    
+  //   for(var i = 0; i < components.length; i++) {
+  //     var type = components[i].types[0];
+  
+  //     if (type === 'street_number') {
+  //       streetNumberInput.value = components[i].long_name;
+  //     } else if (type === 'route') {
+  //       streetInput.value = components[i].long_name;  
+  //     } else if (type === 'locality') {
+  //       cityInput.value = components[i].long_name;
+  //     } else if (type === 'administrative_area_level_1') {
+  //       stateInput.value = components[i].short_name; 
+  //     } else if (type === 'postal_code') {
+  //       zipCodeInput.value = components[i].long_name;
+  //     }
+  //   } 
+  // });
+
+  // Set z-index to be greater than bootstrap modal
+  document.getElementById('addressAutoComplete').style.zIndex = 1051;
+}
+

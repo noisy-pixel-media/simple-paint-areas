@@ -3,15 +3,22 @@
 :root {
   --bg-color-light: #f5f5f5;
   --text-color-dark: #333;
+  --bg-input-color-light: #fff;
+  --bg-list-grp-color-light: #fff;
+  --bg-card-color-light: #fff;
+  --bg-table-color-light: #fff;
 
   --bg-color-dark: #191919; /* Darker background for dark mode */
   --text-color-light: #e0e0e0; /* Lighter text for better contrast */
+  --bg-input-color-dark: #2a466f; 
+  --bg-list-grp-color-dark: #2a466f;
+  --bg-card-color-dark: #2a466f;
+  --bg-table-color-dark: #2a466f;
 
   --accent-color: #2980b9;
   --accent-color-dark: #226a92; 
   --accent-btn-blue: #007bff;
 
-  --bg-input-color-dark: #2a466f; 
 
 }
 
@@ -91,7 +98,9 @@ body {
     margin-right: auto;
   }
   #card-holder {
-    max-width: 55rem;
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -126,23 +135,28 @@ body.dark-mode {
 }
 
 body.dark-mode .table {
-  color: #dee2e6;
+  color: var(--bg-table-color-dark);
 }
 
 .card.dark-mode {
-  background: var(--bg-color-dark);
+  background: var(--bg-card-color-dark);
   color: var(--text-color-light);
-  border-color: var(--bg-color-dark);
+
 }
 
 button.dark-mode, input.dark-mode {
   background: var(--accent-color-dark);
-  color: var(--text-color-light); /* Ensure text is visible */
-  border-color: var(--accent-color-dark);
+  color: var(--text-color-light); 
+}
+
+body.dark-mode select, body.dark-mode select:focus {
+  background: var(--bg-card-color-dark);
+  color: var(--text-color-light); 
+  border: 1px solid var(--bg-card-color-dark);
 }
 
 button.dark-mode:hover {
-  background: lighten(var(--accent-color-dark), 10%);
+  background: lighten(var(--accent-color-dark), 20%);
 }
 
 input.dark-mode, button.dark-mode {
@@ -197,7 +211,7 @@ body.dark-mode input {
 }
 
 body.dark-mode .list-group-item {
-  background-color: var(--bg-input-color-dark);
+  background-color: var(--bg-list-grp-color-dark);
   color: var(--text-color-light);
   border-color: var(--accent-color-dark);  
 }
@@ -207,23 +221,23 @@ body.dark-mode .modal-footer {
 }
 
 body.dark-mode .form-text {
-  color: #dee2e6;
+  color: var(--text-color-light);
 }
 
 body.dark-mode .toast {
-  background-color: #343a40;
-  color: #f8f9fa;
+  background-color: var(--bg-card-color-dark);
+  color: var(--text-color-light);
 }
 
 body.dark-mode .toast-header {
-  background-color: #23272b;
+  background-color: lighten(var(--bg-card-color-dark), 10%);
   border-bottom: 1px solid var(--accent-color-dark);
-  color: #f8f9fa;
+  color: var(--text-color-light);
 }
 
 body.dark-mode .toast-body {
-  background-color: #343a40;
-  color: #f8f9fa;
+  background-color: var(--bg-card-color-dark);
+  color: var(--text-color-light);
 }
 
 
@@ -254,6 +268,12 @@ button:focus {
   box-shadow: 0 0 0 2px rgba(var(--accent-color), 0.5);
 }
 
+li.list-group-item button {
+  min-height: 22px;
+  font-size: .7rem;
+  padding: 1px 3px;
+  margin: 0px 3px;
+}
 
 /*  =======================================================  */
 
@@ -298,22 +318,46 @@ input[type=number] {
 
 /*  =======================================================  */
 
-.summary-area {
-  
+
+
+.top-card {
+  background-color: var(--bg-card-color-light);
+  color: var(--text-color-dark);
+}
+body.dark-mode .top-card {
+  background-color: var(--bg-card-color-dark); 
+  color: var(--text-color-light);
 }
 
-#summary-card {
-  width: 95%;
+.card-title {
+  font-size: 1.1rem;
 }
 
 .card-header {
   font-size: 1.18rem;
   font-weight: 500;
+  background-color: var(--bg-card-color-light);
+  color: var(--text-color-dark);
 }
-.card-title {
-  font-size: 1.1rem;
+body.dark-mode .card-header {
+  font-size: 1.18rem;
+  font-weight: 500;
+  background-color: var(--bg-card-color-dark);
+  color: var(--text-color-light);
 }
 
+.card-body {
+  background-color: var(--bg-card-color-light);
+  color: var(--text-color-dark);
+}
+body.dark-mode .card-body {
+  background-color: var(--bg-card-color-dark); 
+  color: var(--text-color-light);
+}
+
+.area-list-name {
+  min-width: 30%;
+}
 
 /*  =======================================================  */
 
@@ -373,3 +417,13 @@ button.clear-form {
   color: #6c757d;
   font-style: italic;
 }
+
+.pac-container {
+  z-index: 1200 !important; /* higher than Bootstrap modal */
+}
+body.dark-mode .pac-container {
+  z-index: 1200 !important;
+  /* NEED RO FIGURE OUT TEXT COLOR */
+  /* background-color: var(--bg-input-color-dark); */
+  /* color: var(--text-color-light); */
+} 
