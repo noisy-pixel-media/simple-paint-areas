@@ -423,7 +423,7 @@ button.clear-form {
 }
 body.dark-mode .pac-container {
   z-index: 1200 !important;
-  /* NEED RO FIGURE OUT TEXT COLOR */
+  /* NEED TO FIGURE OUT TEXT COLOR */
   /* background-color: var(--bg-input-color-dark); */
   /* color: var(--text-color-light); */
 } 

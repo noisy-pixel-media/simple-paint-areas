@@ -139,21 +139,8 @@
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#areaModal" id="createArea">Add Area</button>
       </div>
       <div class="row m-1" id="areasList">
-    
-        <div class="col-md-12 col-lg-6 mb-2">
-          <ul class="list-group">
-            <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
-              <span class="w-100">Area Name</span>
-              <span class="mx-1">L:</span>
-                <span class="badge bg-primary mx-1">0</span>
-              <span class="mx-1">W:</span>
-                <span class="badge bg-primary mx-1">0</span>
-              <span class="mx-1">H:</span>
-                <span class="badge bg-primary mx-1">0</span>
-              <!-- edit buttons or make entire list item clickable? -->
-            </li>
-          </ul>
-        </div>  
+        
+        <!-- GENERATE CONTENT AND PLACE HERE -->
 
       </div>
     </div>
@@ -203,10 +190,6 @@
                                 <input type="number" class="form-control text-center" id="areaDoorsInt">
                               </div> 
                               <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
-                                <label for="areaDoorsExt">Doors [Ext]</label>
-                                <input type="number" class="form-control text-center" id="areaDoorsExt">
-                              </div>
-                              <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
                                 <label for="areaJambs">Jambs</label>
                                 <input type="number" class="form-control text-center" id="areaJambs">
                               </div>
@@ -222,15 +205,19 @@
                               
                               <!-- Extra Fields to Show with Toggle -->
                               
-                                <div class="form-switch row align-items-center my-2">
-                                  <input class="form-check-input m-0 p-0 col-1" type="checkbox" id="toggleExtraFields">
-                                  <label class="col" for="toggleExtraFields">Toggle Extra Fields</label>
-                                </div>
-                                
+                              <div class="form-switch row align-items-center my-2">
+                                <input class="form-check-input m-0 p-0 col-1" type="checkbox" id="toggleExtraFields">
+                                <label class="col" for="toggleExtraFields">Toggle Extra Fields</label>
+                              </div>
+                              
                               
                               
                               <div id="extraFields" class="d-none">
                                 <div class="row mb-3">
+                                <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                  <label for="areaDoorsExt">Doors [Ext]</label>
+                                  <input type="number" class="form-control text-center" id="areaDoorsExt">
+                                </div>
                                 <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
                                   <label for="ponyWallsLnFt">Pony [LF]</label>
                                   <input type="number" class="form-control text-center" id="ponyWallsLnFt">
@@ -243,18 +230,18 @@
                                   <label for="shelvingLnFt">Shelf [LF]</label>
                                   <input type="number" class="form-control text-center" id="shelvingLnFt">
                                 </div> 
-                                <!-- <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
-                                  <label for="areaWindows">Windows</label>
-                                  <input type="number" class="form-control text-center" id="areaWindows">
+                                <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
+                                  <label for="areaSmClosets">Sm Closet</label>
+                                  <input type="number" class="form-control text-center" id="areaSmClosets">
                                 </div> 
                                 <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
-                                  <label for="areaWindows">Windows</label>
-                                  <input type="number" class="form-control text-center" id="areaWindows">
+                                  <label for="areaMdClosets">Md Closet</label>
+                                  <input type="number" class="form-control text-center" id="areaMdClosets">
                                 </div> 
                                 <div class="col-lg-3 col-md-4 col-sm-3 col-4 text-center">
-                                  <label for="areaWindows">Windows</label>
-                                  <input type="number" class="form-control text-center" id="areaWindows">
-                                </div>  -->
+                                  <label for="areaLgClosets">Lg Closet</label>
+                                  <input type="number" class="form-control text-center" id="areaLgClosets">
+                                </div> 
                                 </div>
                               </div>
 
@@ -351,28 +338,28 @@
                                   <!-- Toggle Cabinetry -->    
                                     <div class="form-switch row align-items-center my-2">
                                       <input class="form-check-input m-0 p-0 col-1" type="checkbox" id="addCabinets">
-                                      <label class="col" for="addCabinets">Add Cabinetry Measurements</label>
+                                      <label class="col" for="addCabinets">Add Cabinetry</label>
                                     </div>                                  
                                   <div id="toggleCabinetry" class="row g-0 d-none">
                                     <div class="input-group ms-2 mb-1 row g-0">                                      
                                       <label class="input-group-text col-4">Base Cabinetry</label>
                                       <input type="number" class="form-control col-2 text-center" id="baseCabLength" value="0">
                                       <label class="input-group-text col-2" for="baseCabLength">LnFt</label>
-                                      <input type="number" class="form-control col-2 text-center" id="baseCabHeight" value="3">
+                                      <input type="number" class="form-control col-2 text-center" id="baseCabHeight" value="3" step="any">
                                       <label class="input-group-text col-2" for="baseCabHeight">(H)Ft</label>
                                     </div>
                                     <div class="input-group ms-2 mb-1 row g-0">                                      
                                       <label class="input-group-text col-4">Upper Cabinetry</label>
                                       <input type="number" class="form-control col-2 text-center" id="upperCabLength" value="0">
                                       <label class="input-group-text col-2" for="upperCabLength">LnFt</label>
-                                      <input type="number" class="form-control col-2 text-center" id="upperCabHeight" value="4">
+                                      <input type="number" class="form-control col-2 text-center" id="upperCabHeight" value="4" step="any">
                                       <label class="input-group-text col-2" for="upperCabHeight">(H)Ft</label>
                                     </div>
                                     <div class="input-group ms-2 mb-1 row g-0">                                      
                                       <label class="input-group-text col-4">Full Cabinetry</label>
                                       <input type="number" class="form-control col-2 text-center" id="fullCabLength" value="0">
                                       <label class="input-group-text col-2" for="fullCabLength">LnFt</label>
-                                      <input type="number" class="form-control col-2 text-center" id="fullCabHeight" value="8">
+                                      <input type="number" class="form-control col-2 text-center" id="fullCabHeight" value="8" step="any">
                                       <label class="input-group-text col-2" for="fullCabHeight">(H)Ft</label>
                                     </div>
                                   </div>
@@ -381,76 +368,94 @@
                           </div>
                           <hr>
                           <!-- Bottom section for calculations -->
-                          <div class="col-md-12 col-sm-12 row align-items-start justify-content-center d-none" id="area-form-calc-section">
+                          <div class="col-md-12 col-sm-12 row align-items-center justify-content-center d-none" id="area-form-calc-section">
 
                             <!-- Autopopulated Calculated Values -->
                             <h5>Calculated Values</h5>
 
-                              <div class="mt-1 col-md-6 col-sm-12 row">
-                                <ul class="list-group mt-1 pe-2">
-                                  <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                              <div class="mt-1 row">
+
+                                <ul class="list-group col-md-6 col-sm-12">
+                                  <li class="list-group-item list-group-item-secondary m-1 d-flex justify-content-between align-items-center">
                                     <span class="w-100">Wall Surface to Paint</span>
                                     <span class="badge bg-primary" id="wallSqFt">0</span>
                                     <span class="badge bg-secondary ms-1">SqFt</span>
                                   </li>
-                                  <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                                </ul>
+                                <ul class="list-group col-md-6 col-sm-12">
+                                  <li class="list-group-item list-group-item-secondary m-1 d-flex justify-content-between align-items-center">
                                     <span class="w-100">Accent Wall Surface</span>
                                     <span class="badge bg-primary" id="accentWallSqFt">0</span>
                                     <span class="badge bg-secondary ms-1">SqFt</span>
                                   </li>
-                                  <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                                </ul>
+                                <ul class="list-group col-md-6 col-sm-12">
+                                  <li class="list-group-item list-group-item-secondary m-1 d-flex justify-content-between align-items-center">
                                     <span class="w-100">Ceiling Surface to Paint</span>
                                     <span class="badge bg-primary" id="ceilingSqFt">0</span>
                                     <span class="badge bg-secondary ms-1">SqFt</span>
                                   </li>
-                                  <li class="list-group-item list-group-item-secondary d-flex align-items-center">
+                                </ul>
+                                <ul class="list-group col-md-6 col-sm-12">
+                                  <li class="list-group-item list-group-item-secondary m-1 d-flex align-items-center">
                                     <span class="w-100">Area Perimeter</span>
                                     <span class="badge bg-primary" id="areaPerimeter">0</span>
                                     <span class="badge bg-secondary ms-1">LnFt</span>
                                   </li>
                                 </ul>
-                              </div>
-
-                              <div class="mt-1 col-md-6 col-sm-12 row">
-                                <ul class="list-group mt-1 pe-2">
-                                  <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                                <ul class="list-group col-md-6 col-sm-12">
+                                  <li class="list-group-item list-group-item-secondary m-1 d-flex justify-content-between align-items-center">
                                     <span class="w-100">Baseboard Linear Footage</span>
                                     <span class="badge bg-primary" id="baseLnFt">0</span>
                                     <span class="badge bg-secondary ms-1">LnFt</span>
                                   </li>
-                                  <li class="list-group-item list-group-item-secondary d-flex justify-content-between align-items-center">
+                                </ul>
+                                <ul class="list-group col-md-6 col-sm-12">
+                                  <li class="list-group-item list-group-item-secondary m-1 d-flex justify-content-between align-items-center">
                                     <span class="w-100">Crown Linear Footage</span>
                                     <span class="badge bg-primary" id="crownLnFt">0</span>
                                     <span class="badge bg-secondary ms-1">LnFt</span>
                                   </li>
-                                  <li class="list-group-item list-group-item-secondary d-flex align-items-center">
+                                </ul>
+                                <ul class="list-group col-md-6 col-sm-12">
+                                  <li class="list-group-item list-group-item-secondary m-1 d-flex align-items-center">
                                     <span class="w-100">Chair Linear Footage</span>
                                     <span class="badge bg-primary" id="chairRailLnFt">0</span>
                                     <span class="badge bg-secondary ms-1">LnFt</span>
                                   </li>
-                                  <li class="list-group-item list-group-item-secondary d-flex align-items-center">
+                                </ul>
+                                <ul class="list-group col-md-6 col-sm-12">
+                                  <li class="list-group-item list-group-item-secondary m-1 d-flex align-items-center">
                                     <span class="w-100">Cabinetry Facial SqFt</span>
                                     <span class="badge bg-primary" id="cabSqFt">0</span>
                                     <span class="badge bg-secondary ms-1">SqFt</span>
                                   </li>
-                                  <!-- <li class="list-group-item list-group-item-secondary d-flex align-items-center">
-                                    <span class="w-100">Chair Linear Footage</span>
-                                    <span class="badge bg-primary" id="chairRailLnFt">0</span>
-                                    <span class="badge bg-secondary ms-1">LnFt</span>
+                                </ul>
+                                <ul class="list-group col-md-6 col-sm-12">
+                                  <li class="list-group-item list-group-item-secondary m-1 d-flex align-items-center">
+                                    <span class="w-100">Total Doors</span>
+                                    <span class="badge bg-primary" id="areaDoorsCount">0</span>
+                                    <span class="badge bg-secondary ms-1">#</span>
                                   </li>
-                                  <li class="list-group-item list-group-item-secondary d-flex align-items-center">
-                                    <span class="w-100">Chair Linear Footage</span>
-                                    <span class="badge bg-primary" id="chairRailLnFt">0</span>
-                                    <span class="badge bg-secondary ms-1">LnFt</span>
-                                  </li> -->
+                                </ul>
+                                <ul class="list-group col-md-6 col-sm-12">
+                                  <li class="list-group-item list-group-item-secondary m-1 d-flex align-items-center">
+                                    <span class="w-100">Total Closets</span>
+                                    <span class="badge bg-primary" id="areaClosetsCount">0</span>
+                                    <span class="badge bg-secondary ms-1">#</span>
+                                  </li>
                                 </ul>
                               </div>
 
-                            <div class="col-lg-12 date-reference text-center mt-3">
-                              <label class="form-text">Area Created:&nbsp;</label>
-                              <span id="createdDate" class="form-text" ></label>
-                              <label class="form-text">Area Modified:&nbsp;</label>
-                              <span id="modifiedDate" class="form-text" ></label>
+                            <div class="col-lg-12 date-reference text-center mt-3 row justify-content-center">
+                              <div class="col-md-6 col-sm-12 m-0">
+                                <label class="form-text">Area Created:&nbsp;</label>
+                                <span id="createdDate" class="form-text" ></span>
+                              </div>
+                              <div class="col-md-6 col-sm-12 m-0">
+                                <label class="form-text">Area Modified:&nbsp;</label>
+                                <span id="modifiedDate" class="form-text" ></span>
+                              </div>
                             </div>
 
                           </div>

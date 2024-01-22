@@ -7,9 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
   const areaForm = document.getElementById('areaForm');
   const customerForm = document.getElementById('customerForm');
   const customerSelect = document.getElementById('customerSelect');
-  
+  const editCustomerBtn = document.getElementById('editCustomer');
+
+  const createCustomerBtn = document.getElementById('createCustomer');
+  const createAreaBtn = document.getElementById('createArea');
+
   let editAreaIndex = -1; // Set index for new record
   let editCustomerIndex = -1; // Set index for new record
+
   
   // Check for Existing Data
   let userSettings = JSON.parse(localStorage.getItem('userSettings')) || {};
@@ -37,6 +42,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // Initial area selection to prepare for rendering
   let selectedCustomerAreas = customers[selCustIndex].areas;
   
+
+  // Save customer selection to local storage for page reload **** Update to allow passing of index to function ****
+  function saveCustIndexToLocal() {
+    userSettings = { lastCustSelected: selCustIndex };
+    localStorage.setItem('userSettings', JSON.stringify(userSettings));
+  }
+
   // Listen and process customer selection
   customerSelect.addEventListener('change', function() {
     selCustIndex = parseInt(this.value, 10);
@@ -44,12 +56,13 @@ document.addEventListener('DOMContentLoaded', function() {
     setCustomerInfoCard();
     renderAreas(selCustIndex);
     updateSummaryTotals(selectedCustomerAreas);
-
-      // Save customer selection to local storage for page reload
-      userSettings = { lastCustSelected: selCustIndex };
-      localStorage.setItem('userSettings', JSON.stringify(userSettings));
+    saveCustIndexToLocal();
   });
 
+  
+
+
+  // Function to Set Customer Information Card  
   function setCustomerInfoCard() {
     const customer = customers[selCustIndex];
     document.getElementById('cardCustName').innerText = customer.name;
@@ -65,10 +78,14 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Clear Forms When Clicking Add and Not Edit
-  const addAreaBtn = document.getElementById('createArea');
-    addAreaBtn.addEventListener('click', () => { clearAreaForm(); });
-  const addCustomerBtn = document.getElementById('createCustomer');
-    addCustomerBtn.addEventListener('click', () => { clearCustomerForm(); });
+    createAreaBtn.addEventListener('click', () => { 
+      editAreaIndex = -1;
+      clearAreaForm(); 
+    });
+    createCustomerBtn.addEventListener('click', () => {
+      editCustomerIndex = -1;
+      clearCustomerForm();
+    });
 
 
   // Save Customer Form
@@ -91,9 +108,10 @@ document.addEventListener('DOMContentLoaded', function() {
     localStorage.setItem('customers', JSON.stringify(customers));
     $('#customerModal').modal('hide');
     populateCustomerDropdown();
-    // clearCustomerForm();
+    setCustomerInfoCard()
     updateSummaryTotals(selectedCustomerAreas);
     showToast('New customer added successfully!');
+    clearCustomerForm();
   });
 
 
@@ -102,8 +120,19 @@ document.addEventListener('DOMContentLoaded', function() {
   function clearCustomerForm() {
     document.getElementById('customerName').value = '';
     document.getElementById('addressAutoComplete').value = '';
-    editCustomerIndex = -1;
+    // editCustomerIndex = -1; 
   }
+  
+  
+  // Function to populate the customer dropdown
+  function populateCustomerDropdown() {
+    customerSelect.innerHTML = customers.map((customer, index) => 
+    `<option value="${index}">${customer.name}</option>`).join('');
+    // editCustomerBtn.style.display = 'inline-block'; 
+    editCustomerBtn.onclick = () => editCustomer(selCustIndex);
+  }
+ 
+  
   // Edit Customer Form Load
   window.editCustomer = function(index) {
     const customer = customers[index];
@@ -113,19 +142,6 @@ document.addEventListener('DOMContentLoaded', function() {
     $('#customerModal').modal('show');
     document.getElementById('customerName').focus();
   };
-  
-
-  // Function to populate the customer dropdown
-  const editCustomerBtn = document.getElementById('editCustomer');
-  function populateCustomerDropdown() {
-    customerSelect.innerHTML = customers.map((customer, index) => 
-        `<option value="${index}">${customer.name}</option>`
-    ).join('');
-  
-    editCustomerBtn.style.display = 'inline-block'; 
-    editCustomerBtn.onclick = () => editCustomer(selCustIndex);
-  }
-
 
 
   // Set global variables for area calculations - Define at document level to persist
@@ -172,6 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
   let calcCrownLnFt = 0;
   let calcChairRailLnFt = 0;
   let calcCabinetFacialSqFt = 0;
+  
 
 
   // Function to calculate and display area calculations
@@ -218,6 +235,7 @@ document.addEventListener('DOMContentLoaded', function() {
           (aBaseCabHeight * aBaseCabLength) + 
           (aUpperCabHeight * aUpperCabLength) + 
           (aFullCabHeight * aFullCabLength));
+      calcAllDoors = aDoorsInt + aDoorsExt;
       
 
       document.getElementById('wallSqFt').textContent = calcWallSqFt; 
@@ -228,6 +246,8 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('crownLnFt').textContent = calcCrownLnFt;
       document.getElementById('chairRailLnFt').textContent = calcChairRailLnFt;
       document.getElementById('cabSqFt').textContent = calcCabinetFacialSqFt;
+      document.getElementById('areaDoorsCount').textContent = calcAllDoors;
+      document.getElementById('areaClosetsCount').textContent = 0;
 
   }
 
@@ -246,6 +266,9 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('fullCabLength').addEventListener('input', calculateAndDisplay);
   document.getElementById('fullCabHeight').addEventListener('input', calculateAndDisplay);
   document.getElementById('numAccentWalls').addEventListener('input', calculateAndDisplay);
+  document.getElementById('areaDoorsInt').addEventListener('input', calculateAndDisplay);
+  document.getElementById('areaDoorsExt').addEventListener('input', calculateAndDisplay);
+  
   // document.getElementById('hasBaseboards').addEventListener('input', calculateAndDisplay);
   // document.getElementById('hasCrown').addEventListener('input', calculateAndDisplay);
   // document.getElementById('hasChairRail').addEventListener('input', calculateAndDisplay);
@@ -298,8 +321,8 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('totalChairRailLnFt').textContent = totalChairRailLengthSelected;
     document.getElementById('totalDoorJambsCount').textContent = totalJambsCountSelected;
     document.getElementById('totalWndwSillsCount').textContent = totalWindowsCountSelected;
-    // document.getElementById('totalIntDoorsCount').textContent = totalDoorsCountSelected;
-    // document.getElementById('totalExtDoorsCount').textContent = totalDoorsCountSelected;
+    document.getElementById('totalIntDoorsCount').textContent = totalIntDoorsCountSelected;
+    document.getElementById('totalExtDoorsCount').textContent = totalExtDoorsCountSelected;
     
     
 
@@ -346,14 +369,17 @@ document.addEventListener('DOMContentLoaded', function() {
       aPaintDoors = document.getElementById('paintDoors').checked;
       aPaintClosets = document.getElementById('paintClosets').checked;
       
-      let aCreatedDate = new Date().toLocaleString();
+      let aCreatedDate = '';
+      console.log('Set CreatedDate Variable Blank',aCreatedDate);
       if (editAreaIndex === -1) {
         aCreatedDate = new Date().toLocaleString()
        } else {
         aCreatedDate = customers[selCustIndex].createdDate
        };
+      console.log('Check Index and set date for new or existing',aCreatedDate);
 
       calculateAndDisplay();
+
       const newArea = {
           areaName: aName,
           areaNameDesc: aNameDesc,
@@ -472,14 +498,17 @@ document.addEventListener('DOMContentLoaded', function() {
           <ul class="list-group">
             <li class="list-group-item list-group-item-secondary d-flex align-items-center">
               <span class="area-list-name col align-self-start" onclick="editArea(${selCustIndex},${index})">${area.areaName}</span>
-              <span class="badge bg-secondary mx-1 col-1 align-self-end">
-                W:<input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Walls')" ${area.paintWalls ? 'checked' : ''}>
+              <span class="badge bg-info mx-1 col-1 align-self-end">
+                <label class="align-middle">W:</label>
+                <input class="align-middle" type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Walls')" ${area.paintWalls ? 'checked' : ''}>
               </span>
-              <span class="badge bg-secondary mx-1 col-1 align-self-end">
-                C:<input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Ceiling')" ${area.paintCeiling ? 'checked' : ''}>
+              <span class="badge bg-info mx-1 col-1 align-self-end">
+                <label class="align-middle">C:</label>
+                <input class="align-middle" type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Ceiling')" ${area.paintCeiling ? 'checked' : ''}>
               </span>
-              <span class="badge bg-secondary mx-1 col-1 align-self-end">
-                T:<input type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Trim')" ${area.paintTrim ? 'checked' : ''}>
+              <span class="badge bg-info mx-1 col-1 align-self-end">
+                <label class="align-middle">T:</label>
+                <input class="align-middle" type="checkbox" onclick="togglePaint(this, '${selCustIndex}', '${index}', 'Trim')" ${area.paintTrim ? 'checked' : ''}>
               </span>
               <span class="badge bg-primary mx-1 col-1 align-self-end">L:${area.areaDimensions.areaLength}</span>
               <span class="badge bg-primary mx-1 col-1 align-self-end">W:${area.areaDimensions.areaWidth}</span>
@@ -550,18 +579,18 @@ document.addEventListener('DOMContentLoaded', function() {
       
       
       // Show createdDate or New Entry
-      // console.log('Created:',area.createdDate);
-      // if (area.createdDate) {
-      //   document.getElementById('createdDate').innerHTML  = area.createdDate;
-      // } else {
-      //   document.getElementById('createdDate').innerHTML  = 'New Area';
-      // };
-      // console.log('Modified:',area.modifiedDate);
-      // if (area.modifiedDate) {
-      //   document.getElementById('modifiedDate').innerHTML  = area.modifiedDate;
-      // } else {
-      //   document.getElementById('modifiedDate').innerHTML  = 'New Entry'; // Placeholder text for new entries
-      // };
+      console.log('Created:',area.createdDate);
+      if (area.createdDate) {
+        document.getElementById('createdDate').innerHTML  = area.createdDate;
+      } else {
+        document.getElementById('createdDate').innerHTML  = 'New Area';
+      };
+      console.log('Modified:',area.modifiedDate);
+      if (area.modifiedDate) {
+        document.getElementById('modifiedDate').innerHTML  = area.modifiedDate;
+      } else {
+        document.getElementById('modifiedDate').innerHTML  = 'New Entry'; // Placeholder text for new entries
+      };
 
       calculateAndDisplay();
       editAreaIndex = areaIndex;
@@ -639,7 +668,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('cabSqFt').textContent = '';
     
     // Clear the createdDate text
-    document.getElementById('createdDate').textContent = '';
+    // document.getElementById('createdDate').textContent = '';
 
   }
 
